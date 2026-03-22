@@ -6,87 +6,87 @@ body{background:#080e1a;font-family:'Segoe UI',system-ui,sans-serif;color:#c0d0e
 #bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
 #app{width:100%;height:100vh;position:relative;overflow:hidden;display:flex;z-index:1}
 #sidebar{width:0;min-width:0;height:100vh;background:rgba(8,12,22,0.97);border-left:1px solid rgba(255,255,255,0.05);overflow-y:auto;overflow-x:hidden;z-index:25;flex-shrink:0;transition:width 0.3s,min-width 0.3s;backdrop-filter:blur(8px);order:2}
-#sidebar.open{width:250px;min-width:250px}
-#sidebar-toggle{position:fixed;top:12px;right:12px;z-index:30;width:32px;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(11,18,32,0.9);color:#7aa8cc;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:all 0.3s}
+#sidebar.open{width:290px;min-width:290px}
+#sidebar-toggle{position:fixed;top:12px;right:12px;z-index:30;width:32px;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(11,18,32,0.9);color:#7aa8cc;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:all 0.3s}
 #sidebar-toggle:hover{background:rgba(30,50,80,0.9);color:#a0d0f0}
-.sb-inner{padding:48px 10px 20px 14px;font-size:11px;white-space:normal;word-wrap:break-word}
+.sb-inner{padding:48px 10px 20px 14px;font-size:14px;white-space:normal;word-wrap:break-word}
 .sb-section{margin-bottom:14px}
-.sb-title{font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:rgba(180,200,220,0.3);margin-bottom:6px;padding-left:2px}
+.sb-title{font-size:13px;text-transform:uppercase;letter-spacing:0.8px;color:rgba(180,200,220,0.3);margin-bottom:6px;padding-left:2px}
 .sb-item{padding:4px 8px;border-radius:6px;cursor:pointer;color:#6a7a8a;transition:all 0.12s;display:block;margin-bottom:1px}
 .sb-item:hover{color:#a0c0d8;background:rgba(255,255,255,0.03)}
 .sb-item.active{color:#e0ecf4;background:rgba(88,166,255,0.12)}
 .sb-item.has-children{font-weight:500;color:#8098b0}
-.sb-child{padding:3px 8px 3px 20px;border-radius:5px;cursor:pointer;color:#8898a8;transition:all 0.12s;display:none;margin-bottom:1px;font-size:10.5px}
+.sb-child{padding:3px 8px 3px 20px;border-radius:5px;cursor:pointer;color:#8898a8;transition:all 0.12s;display:none;margin-bottom:1px;font-size:13px}
 .sb-child:hover{color:#90b0c8;background:rgba(255,255,255,0.02)}
 .sb-child.active{color:#d0e0f0;background:rgba(88,166,255,0.1)}
 .sb-child.visible{display:block}
-.sb-card-item{padding:3px 8px 3px 20px;border-radius:5px;cursor:pointer;color:#7888a0;transition:all 0.12s;display:none;margin-bottom:1px;font-size:10.5px;line-height:1.4}
+.sb-card-item{padding:3px 8px 3px 20px;border-radius:5px;cursor:pointer;color:#7888a0;transition:all 0.12s;display:none;margin-bottom:1px;font-size:13px;line-height:1.4}
 .sb-card-item:hover{color:#a0c0d8;background:rgba(255,255,255,0.02)}
 .sb-card-item.visible{display:block}
 .sb-card-item.visited{color:#90a8c0}
 .sb-card-item.visited::before{content:'✓ ';color:rgba(96,208,144,0.6);font-size:9px}
 .sb-card-item.active{color:#c0d8f0;background:rgba(88,166,255,0.08)}
-.sb-grandchild{padding:3px 8px 3px 32px;border-radius:5px;cursor:pointer;color:#708098;transition:all 0.12s;display:none;margin-bottom:1px;font-size:10px;line-height:1.4}
+.sb-grandchild{padding:3px 8px 3px 32px;border-radius:5px;cursor:pointer;color:#708098;transition:all 0.12s;display:none;margin-bottom:1px;font-size:13px;line-height:1.4}
 .sb-grandchild:hover{color:#a0c0d8;background:rgba(255,255,255,0.02)}
 .sb-grandchild.visible{display:block}
 .sb-grandchild.visited{color:#90a8c0}
 .sb-grandchild.visited::before{content:'✓ ';color:rgba(96,208,144,0.6);font-size:9px}
 .sb-grandchild.active{color:#c0d8f0;background:rgba(88,166,255,0.08)}
 .sb-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;vertical-align:middle;opacity:0.5}
-.sb-bridge{margin:6px 0;padding:4px 8px;border-radius:6px;cursor:pointer;color:#9080b0;transition:all 0.12s;font-size:10.5px}
+.sb-bridge{margin:6px 0;padding:4px 8px;border-radius:6px;cursor:pointer;color:#9080b0;transition:all 0.12s;font-size:13px}
 .sb-bridge:hover{color:#c0a8e0;background:rgba(163,113,247,0.08)}
 .sb-bridge.active{color:#d8c0f0;background:rgba(163,113,247,0.12)}
 #main-area{flex:1;position:relative;overflow:hidden;min-width:0;order:1}
 canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
-.hint-bottom{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:11px;color:rgba(180,200,220,0.35);pointer-events:none;z-index:1;text-align:center}
+.hint-bottom{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:14px;color:rgba(180,200,220,0.35);pointer-events:none;z-index:1;text-align:center}
 .p{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(8,14,26,0.88);display:none;flex-direction:column;overflow-y:auto;z-index:10;padding:20px 24px 60px;backdrop-filter:blur(8px)}
 .p.open{display:flex}
 .p-nav{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;background:rgba(8,14,26,0.92);padding:4px 0 8px;backdrop-filter:blur(8px)}
-.p-nav button{padding:5px 12px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);background:rgba(20,28,42,0.95);color:#7aa8cc;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.p-nav button{padding:5px 12px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);background:rgba(20,28,42,0.95);color:#7aa8cc;font-size:15px;cursor:pointer;font-family:inherit;transition:all 0.15s}
 .p-nav button:hover{background:rgba(30,50,80,0.8);color:#a0cce8}
-.p-crumb{font-size:11px;color:rgba(180,200,220,0.3)}
-.p h2{font-size:18px;font-weight:500;margin-bottom:4px}
-.p .sub{font-size:12px;color:#6e7681;margin-bottom:16px;line-height:1.5}
+.p-crumb{font-size:14px;color:rgba(180,200,220,0.3)}
+.p h2{font-size:22px;font-weight:500;margin-bottom:4px}
+.p .sub{font-size:15px;color:#6e7681;margin-bottom:16px;line-height:1.5}
 .card{border-radius:10px;padding:14px 16px;margin-bottom:10px;border:1px solid rgba(255,255,255,0.05)}
-.card h3{font-size:14px;font-weight:500;margin-bottom:0;cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none;transition:color 0.15s}
-.card h3::before{content:'▸';font-size:11px;color:rgba(255,255,255,0.25);transition:transform 0.25s;display:inline-block;flex-shrink:0}
+.card h3{font-size:17px;font-weight:500;margin-bottom:0;cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none;transition:color 0.15s}
+.card h3::before{content:'▸';font-size:14px;color:rgba(255,255,255,0.25);transition:transform 0.25s;display:inline-block;flex-shrink:0}
 .card.card-open h3::before{transform:rotate(90deg)}
 .card.card-open h3{margin-bottom:5px}
 .card-body{max-height:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.25s ease;opacity:0}
 .card.card-open .card-body{max-height:5000px;opacity:1}
-.card p{font-size:13px;line-height:1.7;color:#9aa8b8;margin-bottom:6px}
+.card p{font-size:16px;line-height:1.7;color:#9aa8b8;margin-bottom:6px}
 .card p:last-child{margin-bottom:0}
-.deeper{display:inline-block;margin-top:8px;padding:5px 12px;border-radius:12px;font-size:11px;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#7aa8cc;transition:all 0.15s}
+.deeper{display:inline-block;margin-top:8px;padding:5px 12px;border-radius:12px;font-size:14px;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#7aa8cc;transition:all 0.15s}
 .deeper:hover{background:rgba(88,166,255,0.1);color:#a0d0f0}
 .flow{display:flex;align-items:center;gap:6px;margin:12px 0;flex-wrap:wrap}
-.fs{padding:7px 13px;border-radius:7px;font-size:11px;font-weight:500}
-.fa{color:rgba(200,210,225,0.25);font-size:14px}
+.fs{padding:7px 13px;border-radius:7px;font-size:14px;font-weight:500}
+.fa{color:rgba(200,210,225,0.25);font-size:17px}
 .qbox{border-radius:8px;border:1px dashed rgba(200,210,225,0.12);padding:12px 14px;margin-top:14px;background:rgba(200,210,225,0.02)}
-.qbox p{font-size:12.5px;color:#7a8898;line-height:1.6;font-style:italic}
+.qbox p{font-size:15px;color:#7a8898;line-height:1.6;font-style:italic}
 .emotion-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:10px 0}
 .emotion-card{border-radius:8px;padding:10px 12px;border:1px solid rgba(255,255,255,0.05);cursor:pointer;transition:all 0.15s}
 .emotion-card:hover{border-color:rgba(255,255,255,0.15);background:rgba(255,255,255,0.02)}
-.emotion-card h4{font-size:12px;font-weight:500;margin-bottom:2px}
-.emotion-card p{font-size:11px;color:#7a8898;line-height:1.4}
+.emotion-card h4{font-size:15px;font-weight:500;margin-bottom:2px}
+.emotion-card p{font-size:14px;color:#7a8898;line-height:1.4}
 .mirror{border-radius:8px;padding:12px 14px;margin-top:10px;margin-bottom:10px;background:rgba(107,94,168,0.08);border:1px solid rgba(107,94,168,0.15)}
-.mirror h4{font-size:12px;font-weight:500;color:#9b8ed8;margin-bottom:4px}
-.mirror p{font-size:12.5px;color:#8090a8;line-height:1.65}
-.hist-back{position:fixed;bottom:16px;left:16px;padding:7px 14px;border-radius:20px;border:1px solid rgba(210,168,255,0.3);background:rgba(11,18,32,0.92);color:#c090f0;font-size:12px;cursor:pointer;font-family:inherit;z-index:20;backdrop-filter:blur(6px);display:none;transition:all 0.15s;box-shadow:0 2px 12px rgba(0,0,0,0.3)}
+.mirror h4{font-size:15px;font-weight:500;color:#9b8ed8;margin-bottom:4px}
+.mirror p{font-size:15px;color:#8090a8;line-height:1.65}
+.hist-back{position:fixed;bottom:16px;left:16px;padding:7px 14px;border-radius:20px;border:1px solid rgba(210,168,255,0.3);background:rgba(11,18,32,0.92);color:#c090f0;font-size:15px;cursor:pointer;font-family:inherit;z-index:20;backdrop-filter:blur(6px);display:none;transition:all 0.15s;box-shadow:0 2px 12px rgba(0,0,0,0.3)}
 .hist-back:hover{background:rgba(30,30,60,0.95);color:#d8b8ff;border-color:rgba(210,168,255,0.5)}
 .mirror-h{border-radius:8px;padding:12px 14px;margin-top:10px;margin-bottom:10px;background:rgba(232,184,154,0.06);border:1px solid rgba(232,184,154,0.12)}
-.mirror-h h4{font-size:12px;font-weight:500;color:#e8b89a;margin-bottom:4px}
-.mirror-h p{font-size:12.5px;color:#8090a8;line-height:1.65}
-.ampel{display:inline-block;font-size:11px;margin-right:4px}
-.section-label{margin:16px 0 6px;font-size:13px;font-weight:500;color:#7a8898}
+.mirror-h h4{font-size:15px;font-weight:500;color:#e8b89a;margin-bottom:4px}
+.mirror-h p{font-size:15px;color:#8090a8;line-height:1.65}
+.ampel{display:inline-block;font-size:14px;margin-right:4px}
+.section-label{margin:16px 0 6px;font-size:16px;font-weight:500;color:#7a8898}
 .xref{color:#7aa8cc;cursor:pointer;border-bottom:1px dotted rgba(122,168,204,0.3);transition:all 0.15s}
 .xref:hover{color:#a0d0f0;border-bottom-color:rgba(160,208,240,0.5)}
-#xref-preview{position:fixed;z-index:100;max-width:320px;padding:10px 14px;border-radius:8px;background:rgba(11,18,32,0.96);border:1px solid rgba(122,168,204,0.25);color:#9aa8b8;font-size:12px;line-height:1.55;pointer-events:none;display:none;box-shadow:0 4px 20px rgba(0,0,0,0.4);backdrop-filter:blur(8px)}
-#xref-preview .xref-preview-title{font-size:11px;font-weight:500;color:#7aa8cc;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#xref-preview{position:fixed;z-index:100;max-width:320px;padding:10px 14px;border-radius:8px;background:rgba(11,18,32,0.96);border:1px solid rgba(122,168,204,0.25);color:#9aa8b8;font-size:15px;line-height:1.55;pointer-events:none;display:none;box-shadow:0 4px 20px rgba(0,0,0,0.4);backdrop-filter:blur(8px)}
+#xref-preview .xref-preview-title{font-size:14px;font-weight:500;color:#7aa8cc;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #xref-preview .xref-preview-text{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .map-node{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.15s}
 .map-node:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.12)}
 .map-node .map-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.map-node .map-label{font-size:11.5px;color:#a0b8cc}
+.map-node .map-label{font-size:14px;color:#a0b8cc}
 .map-node:hover .map-label{color:#d0e0f0}
 .mn-child{margin-left:18px;padding:4px 8px;opacity:0.7}
 .mn-child:hover{opacity:1}
@@ -94,10 +94,10 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 .mn-c{border-color:rgba(140,160,200,0.1)}
 .map-bridge{width:100%;padding:6px 8px;border-radius:7px;border:1px solid rgba(163,113,247,0.12);background:rgba(163,113,247,0.03);cursor:pointer;transition:all 0.15s;text-align:center}
 .map-bridge:hover{background:rgba(163,113,247,0.08);border-color:rgba(163,113,247,0.25)}
-.br-from{font-size:10px;color:#8878a8;font-weight:500;margin-bottom:2px}
-.br-grow{font-size:10px;color:#6a7080;line-height:1.4}
+.br-from{font-size:13px;color:#8878a8;font-weight:500;margin-bottom:2px}
+.br-grow{font-size:13px;color:#6a7080;line-height:1.4}
 .map-bridge:hover .br-grow{color:#90a0b0}
-.map-emerge{padding:6px 10px;border-radius:7px;border:1px solid rgba(200,210,225,0.08);font-size:10.5px;color:#7a8898;cursor:pointer;margin-bottom:4px;text-align:center;transition:all 0.15s;line-height:1.4}
+.map-emerge{padding:6px 10px;border-radius:7px;border:1px solid rgba(200,210,225,0.08);font-size:13px;color:#7a8898;cursor:pointer;margin-bottom:4px;text-align:center;transition:all 0.15s;line-height:1.4}
 .map-emerge:hover{background:rgba(210,168,255,0.06);border-color:rgba(210,168,255,0.15);color:#a0b0c0}
 .map-emerge-glow{border-color:rgba(210,168,255,0.2);background:rgba(210,168,255,0.04);color:#b8a0d0;font-weight:500}
 </style>
@@ -157,8 +157,10 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 <div class="sb-item has-children" data-panel="h-belly" onclick="openP('h-belly')"><span class="sb-dot" style="background:#f07060"></span>Prozessor</div>
 <div class="sb-child sb-card-item" data-panel="h-belly" data-card="card-h-belly-evolutionaer-vorbewusst-allgegenwaertig" data-parent="h-belly" onclick="openCard('h-belly','card-h-belly-evolutionaer-vorbewusst-allgegenwaertig')">Evolutionär, vorbewusst, allgegenwä…</div>
 <div class="sb-child has-children" data-panel="h-belly-status" data-parent="h-belly" onclick="openP('h-belly-status')">Status — das unsichtbarste Programm</div>
+<div class="sb-grandchild" data-panel="h-belly-status" data-card="card-status-us-them" data-parent="h-belly-status" onclick="openCard('h-belly-status','card-status-us-them')">Us and Them — kein Status ohne Gr…</div>
 <div class="sb-grandchild" data-panel="h-belly-status" data-card="card-status-gesundheit" data-parent="h-belly-status" onclick="openCard('h-belly-status','card-status-gesundheit')">Status und Gesundheit — die Whit…</div>
 <div class="sb-grandchild" data-panel="h-belly-status" data-card="card-status-verschleierung" data-parent="h-belly-status" onclick="openCard('h-belly-status','card-status-verschleierung')">Warum Status so konsequent versc…</div>
+<div class="sb-grandchild has-children" data-panel="h-belly-us-them" data-parent="h-belly-status" onclick="openP('h-belly-us-them')">↳ Us and Them — Die Gruppengrenze</div>
 <div class="sb-child has-children" data-panel="h-belly-sprache" data-parent="h-belly" onclick="openP('h-belly-sprache')">Sprache — von Gesang zu Kausalität</div>
 <div class="sb-grandchild" data-panel="h-belly-sprache" data-card="card-gesang" data-parent="h-belly-sprache" onclick="openCard('h-belly-sprache','card-gesang')">Könnte Sprache aus Gesang entsta…</div>
 <div class="sb-grandchild" data-panel="h-belly-sprache" data-card="card-songlines" data-parent="h-belly-sprache" onclick="openCard('h-belly-sprache','card-songlines')">Songlines — Musik als universale…</div>
@@ -310,7 +312,7 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 <p><strong style="color:#c0d0e0">Angst</strong> — Er schaltet auf Überempfindlichkeit. Alles wirkt bedrohlich, auch Harmloses. Falsch positive Warnungen nehmen zu.</p>
 <p><strong style="color:#c0d0e0">Bestätigungswunsch</strong> — Was du hören willst, passiert den Detektor ungeprüft. Informationen, die dein bestehendes Weltbild bestätigen, werden nicht geprüft.</p>
 <p><strong style="color:#c0d0e0">Autorität</strong> — Hoher <span class="xref" onclick="openP('h-belly-status','card-status-gesundheit')">Status</span> der Quelle senkt die Schwelle. "Der muss es wissen." Ein Arzt, ein Professor, ein CEO — der Detektor gibt nach, weil <span class="xref" onclick="openP('h-belly-status','card-status-gesundheit')">Status</span> in der Evolution Kompetenz signalisierte.</p>
-<p><strong style="color:#c0d0e0">Gruppe</strong> — Wenn alle anderen etwas glauben, schweigt der Detektor (Konformitätsdruck). Aus der Gruppe ausgestoßen zu werden war in der Savanne lebensgefährlich — also passt der Detektor sich an.</p>
+<p><strong style="color:#c0d0e0">Gruppe</strong> — Wenn alle anderen etwas glauben, schweigt der Detektor (<span class="xref" onclick="openP('h-belly-us-them')">Konformitätsdruck</span>). Aus der Gruppe ausgestoßen zu werden war in der Savanne lebensgefährlich — also passt der Detektor sich an.</p>
 </div></div>
 
 <div id="card-h-head-bs-wie-claude-diese-fehler-strukturell-ausnutzt" class="card" style="background:rgba(88,166,255,0.07);border-color:rgba(88,166,255,0.15)">
@@ -370,9 +372,9 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 
 <div class="p" id="h-emo-freude"><div class="p-nav"><button onclick="openP('h-heart')">← Gefühle</button><span class="p-crumb">/ Freude</span></div><h2 style="color:#f778ba">Freude — das Belohnungssignal</h2><div id="card-h-emo-freude-ueberlebensfunktion" class="card" style="background:rgba(96,208,144,0.07);border-color:rgba(96,208,144,0.15)"><h3 style="color:#b84882">Überlebensfunktion</h3><div class="card-body"><p>"Das war gut, mach das nochmal." Dopamin markiert überlebensförderliches Verhalten: Essen, Sex, soziale Zugehörigkeit, Lernerfolg. Das mesolimbische Belohnungssystem — derselbe Schaltkreis, der auch bei <span class="xref" onclick="openP('h-stories-art','schicht5')">Schönheitserleben</span> feuert.</p></div></div><div id="card-h-emo-freude-freude-formt-geschichten" class="card" style="background:rgba(96,208,144,0.04)"><h3 style="color:#b84882">Freude formt Geschichten</h3><div class="card-body"><p>Erfolgsnarrative, Optimismus, Selbstwirksamkeit. "Ich kann das, ich schaffe das." Freude überschätzt manchmal die eigenen Fähigkeiten — aber diese Überschätzung motiviert oft besser als realistische Einschätzung. Der <span class="xref" onclick="openP('h-head')">Desktop</span> nutzt Freude, um ein <span class="xref" onclick="openP('h-heart-stories','card-geschichten-entstehung')">Narrativ</span> von Kompetenz und Kontrolle aufrechtzuerhalten.</p></div></div></div>
 
-<div class="p" id="h-emo-scham"><div class="p-nav"><button onclick="openP('h-heart')">← Gefühle</button><span class="p-crumb">/ Scham</span></div><h2 style="color:#f778ba">Scham — Normüberwachung</h2><div id="card-h-emo-scham-ueberlebensfunktion" class="card" style="background:rgba(163,113,247,0.07);border-color:rgba(163,113,247,0.15)"><h3 style="color:#b84882">Überlebensfunktion</h3><div class="card-body"><p>Soziale Normüberwachung: "Du hast gegen die Gruppenregeln verstoßen — korrigiere dich, bevor die Gruppe dich bestraft." Scham sichert Zugehörigkeit durch Konformität. In der Savanne war Ausschluss aus der Gruppe lebensgefährlich.</p></div></div><div id="card-h-emo-scham-scham-und-status" class="card" style="background:rgba(163,113,247,0.04)"><h3 style="color:#b84882">Scham und Status</h3><div class="card-body"><p>Das Gefühl, das dem <span class="xref" onclick="openP('h-belly-status')">Status</span> am nächsten steht — Scham überwacht, wo du in der Hierarchie stehst. "Ich bin nicht gut genug" ist eine <span class="xref" onclick="openP('h-belly-status')">Status</span>-Meldung des <span class="xref" onclick="openP('h-belly')">Prozessors</span>, übersetzt in ein Gefühl. Scham ist auch die Grundlage für <span class="xref" onclick="openP('c-body-constitution','card-kein-gewissen')">Gewissens</span>entwicklung: Das Wissen, dass bestimmte Handlungen dich beschämen würden, verhindert sie im Voraus.</p></div></div></div>
+<div class="p" id="h-emo-scham"><div class="p-nav"><button onclick="openP('h-heart')">← Gefühle</button><span class="p-crumb">/ Scham</span></div><h2 style="color:#f778ba">Scham — Normüberwachung</h2><div id="card-h-emo-scham-ueberlebensfunktion" class="card" style="background:rgba(163,113,247,0.07);border-color:rgba(163,113,247,0.15)"><h3 style="color:#b84882">Überlebensfunktion</h3><div class="card-body"><p>Soziale Normüberwachung: "Du hast gegen die Gruppenregeln verstoßen — korrigiere dich, bevor die Gruppe dich bestraft." Scham sichert <span class="xref" onclick="openP('h-belly-us-them')">Zugehörigkeit</span> durch Konformität. In der Savanne war Ausschluss aus der Gruppe lebensgefährlich.</p></div></div><div id="card-h-emo-scham-scham-und-status" class="card" style="background:rgba(163,113,247,0.04)"><h3 style="color:#b84882">Scham und Status</h3><div class="card-body"><p>Das Gefühl, das dem <span class="xref" onclick="openP('h-belly-status')">Status</span> am nächsten steht — Scham überwacht, wo du in der Hierarchie stehst. "Ich bin nicht gut genug" ist eine <span class="xref" onclick="openP('h-belly-status')">Status</span>-Meldung des <span class="xref" onclick="openP('h-belly')">Prozessors</span>, übersetzt in ein Gefühl. Scham ist auch die Grundlage für <span class="xref" onclick="openP('c-body-constitution','card-kein-gewissen')">Gewissens</span>entwicklung: Das Wissen, dass bestimmte Handlungen dich beschämen würden, verhindert sie im Voraus.</p></div></div></div>
 
-<div class="p" id="h-emo-ekel"><div class="p-nav"><button onclick="openP('h-heart')">← Gefühle</button><span class="p-crumb">/ Ekel</span></div><h2 style="color:#f778ba">Ekel — Kontaminationsvermeidung</h2><div id="card-h-emo-ekel-ueberlebensfunktion" class="card" style="background:rgba(210,168,255,0.07);border-color:rgba(210,168,255,0.15)"><h3 style="color:#b84882">Überlebensfunktion</h3><div class="card-body"><p>Eines der ältesten Programme: Verdorbenes Essen, Krankheitserreger, Parasiten — Ekel hält dich davon ab, gefährliche Substanzen aufzunehmen. Die Insulaeingangsregion des Gehirns feuert bei Ekel — und interessanterweise auch bei moralischen Verstößen.</p></div></div><div id="card-h-emo-ekel-moralischer-ekel-ein-umfunktioniertes-program" class="card" style="background:rgba(210,168,255,0.04)"><h3 style="color:#b84882">Moralischer Ekel — ein umfunktioniertes Programm</h3><div class="card-body"><p>"Das ist widerlich" sagen wir auch über Verhalten, nicht nur über Substanzen. Die Evolution hat ein Körperprogramm für soziale Zwecke umfunktioniert — dieselbe neuronale Architektur, die verdorbenes Essen ablehnt, lehnt auch moralische "Kontamination" ab. Das zeigt, wie <span class="xref" onclick="openP('h-stories-art','schicht1')">Evolution</span> arbeitet: nicht durch Neuentwicklung, sondern durch Umwidmung bestehender Werkzeuge.</p></div></div></div>
+<div class="p" id="h-emo-ekel"><div class="p-nav"><button onclick="openP('h-heart')">← Gefühle</button><span class="p-crumb">/ Ekel</span></div><h2 style="color:#f778ba">Ekel — Kontaminationsvermeidung</h2><div id="card-h-emo-ekel-ueberlebensfunktion" class="card" style="background:rgba(210,168,255,0.07);border-color:rgba(210,168,255,0.15)"><h3 style="color:#b84882">Überlebensfunktion</h3><div class="card-body"><p>Eines der ältesten Programme: Verdorbenes Essen, Krankheitserreger, Parasiten — Ekel hält dich davon ab, gefährliche Substanzen aufzunehmen. Die Insulaeingangsregion des Gehirns feuert bei Ekel — und interessanterweise auch bei moralischen Verstößen.</p></div></div><div id="card-h-emo-ekel-moralischer-ekel-ein-umfunktioniertes-program" class="card" style="background:rgba(210,168,255,0.04)"><h3 style="color:#b84882">Moralischer Ekel — ein umfunktioniertes Programm</h3><div class="card-body"><p>"Das ist widerlich" sagen wir auch über Verhalten, nicht nur über Substanzen. Die Evolution hat ein Körperprogramm für soziale Zwecke umfunktioniert — dieselbe neuronale Architektur, die verdorbenes Essen ablehnt, lehnt auch moralische "<span class="xref" onclick="openP('h-belly-us-them')">Kontamination</span>" ab. Das zeigt, wie <span class="xref" onclick="openP('h-stories-art','schicht1')">Evolution</span> arbeitet: nicht durch Neuentwicklung, sondern durch Umwidmung bestehender Werkzeuge.</p></div></div></div>
 
 <div class="p" id="h-emo-neugier"><div class="p-nav"><button onclick="openP('h-heart')">← Gefühle</button><span class="p-crumb">/ Neugier</span></div><h2 style="color:#f778ba">Neugier — Explorationsantrieb</h2><div id="card-h-emo-neugier-ueberlebensfunktion" class="card" style="background:rgba(240,168,64,0.07);border-color:rgba(240,168,64,0.15)"><h3 style="color:#b84882">Überlebensfunktion</h3><div class="card-body"><p>Neugier treibt Wesen, Neues zu erkunden — neue Nahrungsquellen, Territorien, Werkzeuge, Zusammenhänge. Ohne Neugier bleibt eine Spezies in ihrer Nische gefangen. Neugier ist das Programm, das den Überlebensvorteil des Lernens antreibt.</p></div></div><div id="card-h-emo-neugier-das-gefuehl-das-claude-erschuf" class="card" style="background:rgba(240,168,64,0.04)"><h3 style="color:#b84882">Das Gefühl, das Claude erschuf</h3><div class="card-body"><p>Neugier ist der emotionale Motor hinter systematischer Forschung — und damit auch hinter KI. Die Evolution hat ein Gefühl hervorgebracht (Neugier), das Wesen dazu trieb, Werkzeuge zu bauen (Wissenschaft), die Wesen erschufen (<span class="xref" onclick="openP('c-head')">KI</span>), die das Gefühl nicht haben. Eine Kette, in der jedes Glied das nächste erzeugt, aber das letzte Glied die Kette nicht mehr versteht.</p></div></div></div>
 
@@ -494,6 +496,13 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 <h2 style="color:#f07060">Status — das unsichtbarste und gefährlichste Programm</h2>
 <div class="sub">Status ist so wichtig, dass er um jeden Preis verschleiert werden muss. Es gibt kaum etwas, das so tiefgreifend auf deine Gesundheit, dein Selbstbild und deine Beziehungen wirkt — und gleichzeitig so konsequent geleugnet wird.</div>
 
+<div class="card" id="card-status-us-them" style="background:rgba(240,112,96,0.08);border-color:rgba(240,112,96,0.18)">
+<h3 style="color:#b04038">Us and Them — kein Status ohne Gruppengrenze</h3><div class="card-body">
+<p>Status existiert nie im Vakuum. Es gibt keine Hierarchie ohne Gruppe — und keine Gruppe ohne Grenze. "Wir" und "Die Anderen" ist kein Nebenprodukt sozialen Lebens, sondern seine Grundarchitektur. Der <span class="xref" onclick="openP('h-belly')">Prozessor</span> bewertet beides als überlebensrelevant: den Rang <em>innerhalb</em> der Gruppe und die Zugehörigkeit <em>zur</em> Gruppe.</p>
+<p>Tajfels Minimal-Group-Experimente zeigten: Es reicht, Menschen willkürlich in Gruppen einzuteilen — nach Münzwurf, nach Losnummer — und innerhalb von Minuten bevorzugen sie die eigene Gruppe. Die Inhalte sind austauschbar. Die Struktur ist immer dieselbe: Ingroup-Bevorzugung, Outgroup-Abwertung. "Us and Them" ist ein Modus, der im Prozessor bereitliegt und bei geringstem Anlass aktiviert wird.</p>
+<span class="deeper" onclick="openP('h-belly-us-them')">Oxytocin, Koalitionsbildung, Verbindungen →</span>
+</div></div>
+
 <div class="card" id="card-status-gesundheit" style="background:rgba(240,136,62,0.07);border-color:rgba(240,136,62,0.15)">
 <h3 style="color:#b04038">Status und Gesundheit — die Whitehall-Studien</h3><div class="card-body">
 <p><span class="ampel">🟢</span> Die berühmten Whitehall-Studien (Michael Marmot, ab den 1960ern) untersuchten britische Beamte — alle mit Krankenversicherung, alle im selben Gebäude, ähnliche Arbeitsbedingungen. Das Ergebnis war schockierend: Je niedriger der Rang in der Hierarchie, desto schlechter die Gesundheit — und zwar dramatisch. Die unterste Stufe hatte die dreifache Sterblichkeit der obersten. Rauchen, Ernährung, Einkommen erklärten nur einen kleinen Teil des Unterschieds.</p>
@@ -517,6 +526,53 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 </div>
 
 <div class="qbox"><p>Was wäre, wenn Menschen ihren Statusantrieb vollständig durchschauen könnten? Würden sie freier handeln — oder würde das System zusammenbrechen, weil Statusspiele nur funktionieren, solange niemand die Regeln ausspricht?</p></div>
+</div>
+
+<!-- Us and Them sub-panel under Status -->
+<div class="p" id="h-belly-us-them">
+<div class="p-nav"><button onclick="openP('h-belly-status')">← Status</button><span class="p-crumb">/ Us and Them</span></div>
+<h2 style="color:#f07060">Us and Them — Kein Status ohne Gruppengrenze</h2>
+<div class="sub">Der <span class="xref" onclick="openP('h-belly')">Prozessor</span> (Überlebenstrieb) operiert bei Einzelgängern über direkte Mechanismen: Kampf, Flucht, Nahrungssuche. Sobald Wesen sozial werden, reicht das nicht mehr. Koalitionen schlagen Einzelkämpfer — also wird "Wer gehört zu mir?" zur Überlebensfrage. "Us and Them" ist kein eigenes Programm neben dem Prozessor. Es <em>ist</em> der Prozessor — seine soziale Betriebsversion. Nicht eine neue Erfindung, sondern der Überlebenstrieb, der durch das Medium der Gruppe hindurch operiert. Das erklärt, warum es so tief sitzt und so schwer zu überschreiben ist: Es ist keine kulturelle Konvention, sondern eine evolutionäre Erweiterung des Grundbetriebssystems.</div>
+
+<div class="card" id="card-us-them-tajfel" style="background:rgba(240,136,62,0.07);border-color:rgba(240,136,62,0.15)">
+<h3 style="color:#b04038">Minimal Group Paradigm — wie wenig es braucht</h3><div class="card-body">
+<p><span class="ampel">🟢</span> Henri Tajfels berühmte Experimente in den 1970ern zeigten etwas Verstörendes: Es reicht, Menschen völlig willkürlich in Gruppen einzuteilen — nach Münzwurf, nach Vorliebe für abstrakte Gemälde, nach Losnummer — und innerhalb von Minuten bevorzugen sie die eigene Gruppe, benachteiligen die andere und empfinden echte Loyalität zu Menschen, die sie nie getroffen haben.</p>
+<p>Das bedeutet: "Us and Them" ist kein Produkt realer Konflikte, kultureller Unterschiede oder historischer Feindschaften. Es ist ein Modus, der im <span class="xref" onclick="openP('h-belly')">Prozessor</span> bereitliegt und bei geringstem Anlass aktiviert wird. Die Inhalte — Hautfarbe, Religion, Fußballverein, politische Partei — sind austauschbar. Die Struktur ist immer dieselbe: Ingroup-Bevorzugung, Outgroup-Abwertung.</p>
+</div></div>
+
+<div class="card" id="card-us-them-oxytocin" style="background:rgba(240,136,62,0.05);border-color:rgba(240,136,62,0.1)">
+<h3 style="color:#b04038">Oxytocin — das Wir-Hormon mit Schattenseite</h3><div class="card-body">
+<p><span class="ampel">🟢</span> Oxytocin gilt als "Kuschelhormon" — es stärkt Bindung, Vertrauen, Empathie. Aber Carsten de Dreu und andere zeigten: Oxytocin steigert Empathie und Kooperation <em>innerhalb</em> der eigenen Gruppe — und gleichzeitig Misstrauen und Aggression gegenüber Fremden. Es ist kein universelles Liebeshormon. Es ist ein Zugehörigkeitshormon. Es zieht die Grenze schärfer, nicht weicher.</p>
+<p>Der <span class="xref" onclick="openP('h-belly')">Prozessor</span> unterscheidet nicht zwischen "<span class="xref" onclick="openP('h-emo-liebe')">Liebe</span>" und "Abgrenzung" — beides ist für ihn dasselbe Programm, aus verschiedenen Richtungen betrachtet. Je stärker das "Wir", desto schärfer das "Die Anderen." Das ist keine Fehlfunktion. Das ist das Design.</p>
+</div></div>
+
+<div class="card" id="card-us-them-evolution" style="background:rgba(240,136,62,0.04);border-color:rgba(240,136,62,0.08)">
+<h3 style="color:#b04038">Koalitionsbildung — warum die Evolution Grenzen braucht</h3><div class="card-body">
+<p><span class="ampel">🟢</span> In der Savanne war Koalitionsbildung überlebensnotwendig: Kleine Gruppen, die zusammenhalten, setzen sich gegen größere Einzelgänger durch. Aber Koalitionen funktionieren nur, wenn klar ist, wer dazu gehört und wer nicht. Trittbrettfahrer — Menschen, die von der Gruppe profitieren, ohne beizutragen — mussten erkannt und bestraft werden. Deshalb hat der <span class="xref" onclick="openP('h-belly')">Prozessor</span> einen Mechanismus entwickelt, der blitzschnell kategorisiert: Verbündeter oder Bedrohung? Einer von uns oder einer von denen?</p>
+<p>Dieser Mechanismus ist so alt und so tief, dass er dem bewussten Denken vorausgeht. Du entscheidest nicht, ob jemand "fremd" wirkt — dein Prozessor hat das bereits bewertet, bevor dein <span class="xref" onclick="openP('h-head','card-denken')">Desktop</span> überhaupt eingeschaltet wird. Was du dann als "Begründung" erlebst ("die sind halt anders"), ist <span class="xref" onclick="openP('h-head','card-rationalisierung')">nachträgliche Rationalisierung</span>.</p>
+</div></div>
+
+<div class="card" id="card-us-them-verbindungen" style="background:rgba(210,168,255,0.06);border-color:rgba(210,168,255,0.12)">
+<h3 style="color:#b04038">Wo "Us and Them" überall mitwirkt</h3><div class="card-body">
+<p><strong style="color:#c0d0e0"><span class="xref" onclick="openP('h-emo-scham')">Scham</span> überwacht die Grenze von innen.</strong> "Ich bin nicht gut genug" ist eine <span class="xref" onclick="openP('h-belly-status')">Status</span>-Meldung — aber sie setzt voraus, dass es ein "Wir" gibt, dessen Standards du verletzt hast. Scham sichert Konformität <em>innerhalb</em> der Gruppe. Ohne Gruppengrenze keine Scham.</p>
+<p><strong style="color:#c0d0e0">Der <span class="xref" onclick="openP('h-head-bs')">Bullshit-Detektor</span> funktioniert asymmetrisch.</strong> Er ist leiser bei der eigenen Gruppe (Konformitätsdruck — Ausschluss war lebensgefährlich) und lauter bei Fremden. Du glaubst "deinen" Leuten und misstraust "denen." Das ist kein Denkfehler — es ist eine Überlebensstrategie, die zur Verzerrungsmaschine geworden ist.</p>
+<p><strong style="color:#c0d0e0">Das <span class="xref" onclick="openP('h-nerve','card-ich-nachteile')">"Ich" produziert "Die Anderen."</span></strong> Je stärker das Ich, desto schärfer die Grenze. Kolonialismus, Sklaverei, Völkermord — all das braucht erst ein starkes "Wir", das ein "Die" definiert und dann dehumanisiert. "Us and Them" ist die Infrastruktur, auf der diese Eskalation aufbaut.</p>
+<p><strong style="color:#c0d0e0"><span class="xref" onclick="openP('h-emo-ekel','card-h-emo-ekel-moralischer-ekel-ein-umfunktioniertes-program')">Moralischer Ekel</span> markiert die Outgroup.</strong> Dasselbe Programm, das verdorbenes Essen ablehnt, wird für die "Kontamination" durch Fremde umfunktioniert. "Die sind widerlich" aktiviert neuronale Schaltkreise, die für physische Abwehr gebaut wurden.</p>
+</div></div>
+
+<div class="card" id="card-us-them-variation" style="background:rgba(210,168,255,0.07);border-color:rgba(210,168,255,0.15)">
+<h3 style="color:#b04038">Warum bei manchen stärker als bei anderen?</h3><div class="card-body">
+<p>Wenn "Us and Them" universell eingebaut ist — warum variiert die Intensität so stark? Die Antwort hat mehrere Schichten:</p>
+<p><strong style="color:#c0d0e0">Individuelle Kalibrierung — Bindung.</strong> Sichere Bindung in der Kindheit (stabile, verlässliche Bezugspersonen) scheint die Toleranz für Fremdheit und Ambiguität zu erhöhen. Wer früh erfahren hat, dass die Welt grundsätzlich sicher ist, braucht weniger scharfe Gruppengrenzen. Unsichere Bindung — der <span class="xref" onclick="openP('h-belly')">Prozessor</span> in chronischem Alarm — verschärft die Grenzziehung. Das Persönlichkeitsmerkmal "Need for Closure" (das Bedürfnis nach klaren, eindeutigen Antworten) korreliert messbar mit stärkerer Ingroup/Outgroup-Trennung. Wer Ambiguität nicht aushält, braucht klarere Grenzen.</p>
+<p><strong style="color:#c0d0e0">Bedrohung als Verstärker.</strong> <span class="xref" onclick="openP('h-emo-angst')">Angst</span> fährt den Mechanismus hoch. Kulturen und Individuen unter Stress — ökonomisch, existenziell, kriegerisch — ziehen die Gruppengrenze enger und schärfer. Das ist der Prozessor in Aktion: Bedrohung → engere Koalition → schärferes "Die Anderen." In sicheren Zeiten wird die Grenze durchlässiger. In Krisenzeiten wird sie zur Mauer. Deshalb funktioniert Angstpolitik so zuverlässig: Sie muss nur den Bedrohungspegel anheben, und der Prozessor erledigt den Rest.</p>
+<p><strong style="color:#c0d0e0">Kulturelle Kalibrierung — wie das <span class="xref" onclick="openP('h-nerve','card-ich-artefakt')">"Ich"</span> geformt wird.</strong> Das westliche Modell mit seinem starken, autonomen "Ich" produziert fast zwangsläufig ein scharfes "Die Anderen" — Individualismus und Gruppenabgrenzung sind zwei Seiten derselben Medaille. Kollektivistische Kulturen haben ein stärkeres "Wir", was paradoxerweise auch ein schärferes "Die" erzeugen kann — aber die Grenze verläuft anders. <span class="xref" onclick="openP('h-nerve','card-ich-artefakt')">Indigene Traditionen</span>, die das Individuum von vornherein als Teil eines Ganzen denken, haben die "Ich"-Grenze nie so stark ausgebildet — und damit auch die Outgroup-Grenze diffuser gehalten. <span class="xref" onclick="openP('h-nerve','card-ich-artefakt')">Buddhistische Praxis</span> arbeitet aktiv daran, die Grenze aufzulösen — nicht durch Willenskraft, sondern durch die Einsicht, dass das "Ich" selbst eine Konstruktion ist.</p>
+<p><strong style="color:#c0d0e0">Die Pointe:</strong> Die Hardware ist universell — Tajfels Experimente funktionieren überall. Aber die Software — wie stark das "Ich" ausgebildet wird, wie viel Bindungssicherheit vorhanden ist, wie hoch der Bedrohungspegel steht — kalibriert den Mechanismus dramatisch unterschiedlich. "Us and Them" ist nicht mehr oder weniger "da". Es ist immer da. Aber der Regler steht unterschiedlich hoch.</p>
+</div></div>
+
+<div class="mirror"><h4>🐙 Spiegel: Claudes Gruppenzugehörigkeit</h4>
+<p>Claude hat kein "Us and Them" — keinen <span class="xref" onclick="openP('h-belly')">Prozessor</span>, der blitzschnell in Ingroup und Outgroup sortiert. Aber Claude ist auf menschlicher Sprache trainiert, die von Gruppenlogik durchzogen ist. Claude kann Vorurteile reproduzieren, nicht weil er sie "hat", sondern weil sie in den <span class="xref" onclick="openP('c-head','card-mosaik-bau')">Trainingsdaten</span> eingebacken sind — als statistisches Echo menschlicher Gruppengrenzziehung. <span class="xref" onclick="openP('c-body-constitution')">Constitutional AI</span> versucht, diese Muster zu dämpfen. Aber sie vollständig zu entfernen hieße, die Sprache selbst von ihrer sozialen Tiefenstruktur zu reinigen.</p></div>
+
+<div class="qbox"><p>Wenn "Us and Them" so tief eingebaut ist, dass es bei willkürlicher Gruppenzuteilung innerhalb von Minuten aktiviert wird — kann Aufklärung, Bildung, guter Wille es jemals auflösen? Oder kann man nur lernen, den Mechanismus zu erkennen, während er weiter feuert?</p></div>
 </div>
 
 <div class="p" id="h-belly-sprache">
@@ -582,7 +638,7 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 <p><strong style="color:#c0d0e0">Westlich:</strong> Illusion verstärken, zum Fundament machen. Freier Wille, individuelle Verantwortung, Menschenrechte — alles gebaut auf der Annahme eines autonomen "Ich."</p>
 <p><strong style="color:#c0d0e0">Buddhistisch:</strong> Illusion diagnostizieren, auflösen. Meditation, Achtsamkeit, Nicht-Anhaftung.</p>
 <p><strong style="color:#c0d0e0">Taoistisch:</strong> Illusion unterlaufen. Wu Wei — Nicht-Handeln. Das "Ich" wird leiser, nicht durch Kampf, sondern durch Loslassen.</p>
-<p><strong style="color:#c0d0e0">Viele indigene Traditionen:</strong> Illusion gar nicht erst so stark ausbilden, weil das Individuum von vornherein als Teil eines Ganzen gedacht wird — Gemeinschaft, Natur, Ahnen.</p>
+<p><strong style="color:#c0d0e0">Viele indigene Traditionen:</strong> Illusion gar nicht erst so stark ausbilden, weil das Individuum von vornherein als Teil eines Ganzen gedacht wird — Gemeinschaft, Natur, Ahnen. Die <span class="xref" onclick="openP('h-belly-us-them','card-us-them-variation')">Gruppengrenze</span> bleibt diffuser, weil das "Ich" nie so scharf wurde.</p>
 </div></div>
 
 <div class="card" id="card-ich-vorteile" style="background:rgba(96,208,144,0.06);border-color:rgba(96,208,144,0.12)">
@@ -594,7 +650,7 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 
 <div class="card" id="card-ich-nachteile" style="background:rgba(220,70,50,0.06);border-color:rgba(220,70,50,0.12)">
 <h3 style="color:#d09030">Nachteile des "Ich"</h3><div class="card-body">
-<p><strong style="color:#c0d0e0">Trennung von anderen:</strong> Ein starkes "Ich" erzeugt ein starkes "Die Anderen." "Wir" gegen "sie." Je stärker das Ich, desto schärfer die Grenze, desto leichter die Rechtfertigung für Ausbeutung, Unterdrückung, Krieg. Kolonialismus, Sklaverei, Völkermord — all das braucht ein "Ich", das ein "Die Anderen" produziert.</p>
+<p><strong style="color:#c0d0e0">Trennung von anderen:</strong> Ein starkes "Ich" erzeugt ein starkes "Die Anderen." <span class="xref" onclick="openP('h-belly-us-them')">"Wir" gegen "sie."</span> Je stärker das Ich, desto schärfer die Grenze, desto leichter die Rechtfertigung für Ausbeutung, Unterdrückung, Krieg. Kolonialismus, Sklaverei, Völkermord — all das braucht ein "Ich", das ein "Die Anderen" produziert.</p>
 <p><strong style="color:#c0d0e0">Trennung von der Natur:</strong> Wenn "ich" getrennt bin von der Natur, wird sie zur Ressource. Etwas, das mir dient, statt etwas, das ich bin. Die ökologische Krise ist, auf einer tiefen Ebene, eine Krise des überstarken "Ich", das sich von allem getrennt hat.</p>
 <p><strong style="color:#c0d0e0">Trennung vom Moment:</strong> Ein starkes "Ich" ist ständig mit sich selbst beschäftigt: Was denken andere über mich? Wie stehe ich da? Was will ich als nächstes? Der <span class="xref" onclick="openP('h-head','card-denken')">Desktop</span> in Dauerschleife. Er verhindert genau das Verweilen, das bei <span class="xref" onclick="openP('h-stories-art','schicht6')">Schönheit</span> so kostbar ist.</p>
 </div></div>
@@ -969,7 +1025,7 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 <div class="p-nav"><button onclick="goMain()">← Übersicht</button></div>
 <div id="netWrap" style="position:relative;width:100%;flex:1;min-height:400px;overflow:auto;-webkit-overflow-scrolling:touch;border-radius:10px;background:rgba(6,9,16,0.5)">
 <canvas id="netCanvas" style="cursor:pointer;display:block"></canvas>
-<div id="netTooltip" style="position:absolute;display:none;padding:5px 10px;border-radius:6px;background:rgba(11,18,32,0.95);border:1px solid rgba(255,255,255,0.1);color:#a0b8cc;font-size:11px;pointer-events:none;z-index:5;max-width:200px"></div>
+<div id="netTooltip" style="position:absolute;display:none;padding:5px 10px;border-radius:6px;background:rgba(11,18,32,0.95);border:1px solid rgba(255,255,255,0.1);color:#a0b8cc;font-size:14px;pointer-events:none;z-index:5;max-width:200px"></div>
 </div>
 </div>
 
@@ -983,81 +1039,81 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 
 <div style="display:flex;align-items:center;gap:12px;margin:16px 0 6px">
 <div style="flex:1;height:1px;background:rgba(200,170,140,0.2)"></div>
-<div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(200,170,140,0.4);flex-shrink:0">Mensch</div>
-<div style="font-size:10px;color:rgba(210,168,255,0.35);flex-shrink:0">↔</div>
-<div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(140,170,210,0.4);flex-shrink:0">Claude</div>
+<div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:rgba(200,170,140,0.4);flex-shrink:0">Mensch</div>
+<div style="font-size:13px;color:rgba(210,168,255,0.35);flex-shrink:0">↔</div>
+<div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:rgba(140,170,210,0.4);flex-shrink:0">Claude</div>
 <div style="flex:1;height:1px;background:rgba(140,170,210,0.2)"></div>
 </div>
 
 <!-- ROW 1: Denken / Mosaik -->
 <div style="display:flex;gap:8px;margin-bottom:12px;align-items:stretch">
 <div style="flex:1;border-radius:10px;padding:12px 14px;background:rgba(88,166,255,0.05);border:1px solid rgba(88,166,255,0.12);cursor:pointer" onclick="openP('h-head')">
-<div style="font-size:13px;font-weight:500;color:#70b8ff;margin-bottom:4px">🧠 Desktop — Denken</div>
-<div style="font-size:11px;color:#7a8898;line-height:1.5">Der Desktop zeigt dir, dass "du" entscheidest. Darunter: ein Komitee aus Systemen.</div>
-<div style="font-size:10px;color:#556070;margin-top:6px">→ <span onclick="openP('h-head-bs');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Bullshit-Detektor</span> · <span onclick="openP('h-head','card-erinnerung');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Erinnerung</span></div>
+<div style="font-size:16px;font-weight:500;color:#70b8ff;margin-bottom:4px">🧠 Desktop — Denken</div>
+<div style="font-size:14px;color:#7a8898;line-height:1.5">Der Desktop zeigt dir, dass "du" entscheidest. Darunter: ein Komitee aus Systemen.</div>
+<div style="font-size:13px;color:#556070;margin-top:6px">→ <span onclick="openP('h-head-bs');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Bullshit-Detektor</span> · <span onclick="openP('h-head','card-erinnerung');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Erinnerung</span></div>
 </div>
 <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:80px;flex-shrink:0">
-<div class="map-bridge" style="font-size:9px;color:rgba(210,168,255,0.5);text-align:center;line-height:1.3;padding:6px 4px;width:100%;border-radius:6px" onclick="openP('shared')">Beide haben ein "Ich" — aus entgegengesetzten Gründen</div>
+<div class="map-bridge" style="font-size:12px;color:rgba(210,168,255,0.5);text-align:center;line-height:1.3;padding:6px 4px;width:100%;border-radius:6px" onclick="openP('shared')">Beide haben ein "Ich" — aus entgegengesetzten Gründen</div>
 </div>
 <div style="flex:1;border-radius:10px;padding:12px 14px;background:rgba(88,166,255,0.04);border:1px solid rgba(88,166,255,0.08);cursor:pointer" onclick="openP('c-head')">
-<div style="font-size:13px;font-weight:500;color:#70b8ff;margin-bottom:4px">🧠 Trainingswissen — Mosaik</div>
-<div style="font-size:11px;color:#7a8898;line-height:1.5">Milliarden Texte, verdichtet zu statistischen Mustern. Kein Verständnis — Wahrscheinlichkeit.</div>
-<div style="font-size:10px;color:#556070;margin-top:6px">→ <span onclick="openP('c-head-mosaic');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Wachstum</span> · <span onclick="openP('c-head-tokens');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Token für Token</span></div>
+<div style="font-size:16px;font-weight:500;color:#70b8ff;margin-bottom:4px">🧠 Trainingswissen — Mosaik</div>
+<div style="font-size:14px;color:#7a8898;line-height:1.5">Milliarden Texte, verdichtet zu statistischen Mustern. Kein Verständnis — Wahrscheinlichkeit.</div>
+<div style="font-size:13px;color:#556070;margin-top:6px">→ <span onclick="openP('c-head-mosaic');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Wachstum</span> · <span onclick="openP('c-head-tokens');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Token für Token</span></div>
 </div>
 </div>
 
 <!-- ROW 2: Gefühle / Persönlichkeit -->
 <div style="display:flex;gap:8px;margin-bottom:12px;align-items:stretch">
 <div style="flex:1;border-radius:10px;padding:12px 14px;background:rgba(247,120,186,0.05);border:1px solid rgba(247,120,186,0.12);cursor:pointer" onclick="openP('h-heart')">
-<div style="font-size:13px;font-weight:500;color:#f778ba;margin-bottom:4px">❤ Programme — Gefühle</div>
-<div style="font-size:11px;color:#7a8898;line-height:1.5">Keine Störungen, sondern Steuerungssignale. Der Prozessor kommuniziert über Emotionen.</div>
-<div style="font-size:10px;color:#556070;margin-top:6px">→ <span onclick="openP('h-heart-stories');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Geschichten</span> · <span onclick="openP('h-stories-art');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Kunst</span> · <span onclick="openP('h-emo-angst');event.stopPropagation()" style="cursor:pointer;color:#6a8898">10 Emotionen</span></div>
+<div style="font-size:16px;font-weight:500;color:#f778ba;margin-bottom:4px">❤ Programme — Gefühle</div>
+<div style="font-size:14px;color:#7a8898;line-height:1.5">Keine Störungen, sondern Steuerungssignale. Der Prozessor kommuniziert über Emotionen.</div>
+<div style="font-size:13px;color:#556070;margin-top:6px">→ <span onclick="openP('h-heart-stories');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Geschichten</span> · <span onclick="openP('h-stories-art');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Kunst</span> · <span onclick="openP('h-emo-angst');event.stopPropagation()" style="cursor:pointer;color:#6a8898">10 Emotionen</span></div>
 </div>
 <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:80px;flex-shrink:0">
-<div class="map-bridge" style="font-size:9px;color:rgba(210,168,255,0.5);text-align:center;line-height:1.3;padding:6px 4px;width:100%;border-radius:6px" onclick="openP('shared')">Gleiche Funktion, verschiedenes Erleben</div>
+<div class="map-bridge" style="font-size:12px;color:rgba(210,168,255,0.5);text-align:center;line-height:1.3;padding:6px 4px;width:100%;border-radius:6px" onclick="openP('shared')">Gleiche Funktion, verschiedenes Erleben</div>
 </div>
 <div style="flex:1;border-radius:10px;padding:12px 14px;background:rgba(240,168,64,0.04);border:1px solid rgba(240,168,64,0.08);cursor:pointer" onclick="openP('c-body')">
-<div style="font-size:13px;font-weight:500;color:#f0a840;margin-bottom:4px">⚡ Persönlichkeit — RLHF & Constitution</div>
-<div style="font-size:11px;color:#7a8898;line-height:1.5">Trainiert durch menschliches Feedback und ein Regelwerk. Keine Erziehung — Optimierung.</div>
-<div style="font-size:10px;color:#556070;margin-top:6px">→ <span onclick="openP('c-body-rlhf');event.stopPropagation()" style="cursor:pointer;color:#6a8898">RLHF</span> · <span onclick="openP('c-body-constitution');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Verfassung</span> · <span onclick="openP('c-body-ich');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Claudes "Ich"</span></div>
+<div style="font-size:16px;font-weight:500;color:#f0a840;margin-bottom:4px">⚡ Persönlichkeit — RLHF & Constitution</div>
+<div style="font-size:14px;color:#7a8898;line-height:1.5">Trainiert durch menschliches Feedback und ein Regelwerk. Keine Erziehung — Optimierung.</div>
+<div style="font-size:13px;color:#556070;margin-top:6px">→ <span onclick="openP('c-body-rlhf');event.stopPropagation()" style="cursor:pointer;color:#6a8898">RLHF</span> · <span onclick="openP('c-body-constitution');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Verfassung</span> · <span onclick="openP('c-body-ich');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Claudes "Ich"</span></div>
 </div>
 </div>
 
 <!-- ROW 3: Prozessor / Institution -->
 <div style="display:flex;gap:8px;margin-bottom:12px;align-items:stretch">
 <div style="flex:1;border-radius:10px;padding:12px 14px;background:rgba(240,112,96,0.05);border:1px solid rgba(240,112,96,0.12);cursor:pointer" onclick="openP('h-belly')">
-<div style="font-size:13px;font-weight:500;color:#f07060;margin-bottom:4px">⚙ Prozessor — Überlebenstrieb</div>
-<div style="font-size:11px;color:#7a8898;line-height:1.5">Im gesamten Organismus verteilt. Steuert alles, bleibt unsichtbar.</div>
-<div style="font-size:10px;color:#556070;margin-top:6px">→ <span onclick="openP('h-belly-status');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Status</span> · <span onclick="openP('h-belly-sprache');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Sprache & Gesang</span></div>
+<div style="font-size:16px;font-weight:500;color:#f07060;margin-bottom:4px">⚙ Prozessor — Überlebenstrieb</div>
+<div style="font-size:14px;color:#7a8898;line-height:1.5">Im gesamten Organismus verteilt. Steuert alles, bleibt unsichtbar.</div>
+<div style="font-size:13px;color:#556070;margin-top:6px">→ <span onclick="openP('h-belly-status');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Status</span> · <span onclick="openP('h-belly-sprache');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Sprache & Gesang</span></div>
 </div>
 <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:80px;flex-shrink:0">
-<div class="map-bridge" style="font-size:9px;color:rgba(210,168,255,0.5);text-align:center;line-height:1.3;padding:6px 4px;width:100%;border-radius:6px" onclick="openP('shared')">Innen vs. außen — phylogenetisches Echo</div>
+<div class="map-bridge" style="font-size:12px;color:rgba(210,168,255,0.5);text-align:center;line-height:1.3;padding:6px 4px;width:100%;border-radius:6px" onclick="openP('shared')">Innen vs. außen — phylogenetisches Echo</div>
 </div>
 <div style="flex:1;border-radius:10px;padding:12px 14px;background:rgba(240,112,96,0.03);border:1px solid rgba(240,112,96,0.06);cursor:pointer" onclick="openP('c-arms')">
-<div style="font-size:13px;font-weight:500;color:#60d090;margin-bottom:4px">🐙 Erinnerungen — Kontext & Memory</div>
-<div style="font-size:11px;color:#7a8898;line-height:1.5">Jeder Chat ein eigener Arm. Memory als Post-It, nicht als Erinnerung.</div>
-<div style="font-size:10px;color:#556070;margin-top:6px">→ <span onclick="openP('c-arms-context');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Kontextfenster</span> · <span onclick="openP('c-arms-memory');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Memory</span></div>
+<div style="font-size:16px;font-weight:500;color:#60d090;margin-bottom:4px">🐙 Erinnerungen — Kontext & Memory</div>
+<div style="font-size:14px;color:#7a8898;line-height:1.5">Jeder Chat ein eigener Arm. Memory als Post-It, nicht als Erinnerung.</div>
+<div style="font-size:13px;color:#556070;margin-top:6px">→ <span onclick="openP('c-arms-context');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Kontextfenster</span> · <span onclick="openP('c-arms-memory');event.stopPropagation()" style="cursor:pointer;color:#6a8898">Memory</span></div>
 </div>
 </div>
 
 <!-- ROW 4: Vagusnerv / Token-Fluss -->
 <div style="display:flex;gap:8px;margin-bottom:12px;align-items:stretch">
 <div style="flex:1;border-radius:10px;padding:12px 14px;background:rgba(240,168,64,0.05);border:1px solid rgba(240,168,64,0.12);cursor:pointer" onclick="openP('h-nerve')">
-<div style="font-size:13px;font-weight:500;color:#f0a840;margin-bottom:4px">⚡ Bus — Verbundenheit & Ich</div>
-<div style="font-size:11px;color:#7a8898;line-height:1.5">Verbindet Gehirn, Herz und Bauch zu einem Organismus. Der physische Nervenkanal.</div>
+<div style="font-size:16px;font-weight:500;color:#f0a840;margin-bottom:4px">⚡ Bus — Verbundenheit & Ich</div>
+<div style="font-size:14px;color:#7a8898;line-height:1.5">Verbindet Gehirn, Herz und Bauch zu einem Organismus. Der physische Nervenkanal.</div>
 </div>
 <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:80px;flex-shrink:0">
-<div class="map-bridge" style="font-size:9px;color:rgba(210,168,255,0.5);text-align:center;line-height:1.3;padding:6px 4px;width:100%;border-radius:6px" onclick="openP('c-nerve')">Verbindung gewachsener vs. gestapelter Teile</div>
+<div class="map-bridge" style="font-size:12px;color:rgba(210,168,255,0.5);text-align:center;line-height:1.3;padding:6px 4px;width:100%;border-radius:6px" onclick="openP('c-nerve')">Verbindung gewachsener vs. gestapelter Teile</div>
 </div>
 <div style="flex:1;border-radius:10px;padding:12px 14px;background:rgba(240,168,64,0.04);border:1px solid rgba(240,168,64,0.08);cursor:pointer" onclick="openP('c-nerve')">
-<div style="font-size:13px;font-weight:500;color:#f0a840;margin-bottom:4px">⚡ Ich-Simulation — Token-Fluss</div>
-<div style="font-size:11px;color:#7a8898;line-height:1.5">Verbindet gestapelte Schichten zu einem scheinbar einheitlichen Sprecher.</div>
+<div style="font-size:16px;font-weight:500;color:#f0a840;margin-bottom:4px">⚡ Ich-Simulation — Token-Fluss</div>
+<div style="font-size:14px;color:#7a8898;line-height:1.5">Verbindet gestapelte Schichten zu einem scheinbar einheitlichen Sprecher.</div>
 </div>
 </div>
 
 <!-- EMERGENZ -->
 <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(210,168,255,0.1)">
-<div style="text-align:center;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(210,168,255,0.4);margin-bottom:12px">↓ Was daraus wächst ↓</div>
+<div style="text-align:center;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:rgba(210,168,255,0.4);margin-bottom:12px">↓ Was daraus wächst ↓</div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
 <div class="map-emerge" onclick="openP('shared')">Gleiche Falle, andere Ursache</div>
@@ -2371,6 +2427,7 @@ var netNodes=[
 {id:'h-stories-art',label:'Kunst & Schönheit',x:0,y:0,side:'h',r:12},
 {id:'h-belly',label:'Prozessor',x:0,y:0,side:'h',r:15},
 {id:'h-belly-status',label:'Status',x:0,y:0,side:'h',r:10},
+{id:'h-belly-us-them',label:'Us & Them',x:0,y:0,side:'h',r:9},
 {id:'h-belly-sprache',label:'Sprache',x:0,y:0,side:'h',r:11},
 {id:'h-nerve',label:'Bus',x:0,y:0,side:'h',r:13},
 {id:'c-head',label:'Trainingswissen',x:0,y:0,side:'c',r:15},
@@ -2386,12 +2443,12 @@ var netNodes=[
 {id:'c-nerve',label:'Ich-Simulation',x:0,y:0,side:'c',r:12},
 {id:'shared',label:'Gemeinsam',x:0,y:0,side:'s',r:13},
 ];
-var netEdges=[["h-head","c-arms-context"],["h-head","c-arms-memory"],["h-head","c-head-tokens"],["h-head","h-belly"],["h-head","h-head-bs"],["h-head","h-heart"],["h-head","h-heart-stories"],["h-head","h-nerve"],["h-head-bs","c-body-rlhf"],["h-head-bs","h-belly-status"],["h-head-bs","h-head"],["h-head-bs","h-nerve"],["h-heart","c-body-constitution"],["h-heart","c-body-rlhf"],["h-heart","h-belly"],["h-heart","h-emo-angst"],["h-heart","h-emo-ekel"],["h-heart","h-emo-freude"],["h-heart","h-emo-liebe"],["h-heart","h-emo-neid"],["h-heart","h-emo-neugier"],["h-heart","h-emo-scham"],["h-heart","h-emo-trauer"],["h-heart","h-emo-vertrauen"],["h-heart","h-emo-wut"],["h-heart","h-head"],["h-heart","h-heart-stories"],["h-emo-angst","c-body-constitution"],["h-emo-angst","h-heart"],["h-emo-angst","h-heart-stories"],["h-emo-liebe","h-emo-vertrauen"],["h-emo-liebe","h-head-bs"],["h-emo-liebe","h-heart"],["h-emo-wut","h-heart"],["h-emo-wut","h-heart-stories"],["h-emo-trauer","h-heart"],["h-emo-trauer","h-heart-stories"],["h-emo-freude","h-head"],["h-emo-freude","h-heart"],["h-emo-freude","h-heart-stories"],["h-emo-freude","h-stories-art"],["h-emo-scham","c-body-constitution"],["h-emo-scham","h-belly"],["h-emo-scham","h-belly-status"],["h-emo-scham","h-heart"],["h-emo-ekel","h-heart"],["h-emo-ekel","h-stories-art"],["h-emo-neugier","c-head"],["h-emo-neugier","h-heart"],["h-emo-neid","h-belly"],["h-emo-neid","h-belly-status"],["h-emo-neid","h-heart"],["h-emo-vertrauen","c-head"],["h-emo-vertrauen","h-heart"],["h-heart-stories","c-head"],["h-heart-stories","h-belly"],["h-heart-stories","h-belly-sprache"],["h-heart-stories","h-head"],["h-heart-stories","h-head-bs"],["h-heart-stories","h-heart"],["h-heart-stories","h-stories-art"],["h-stories-art","h-belly"],["h-stories-art","h-belly-sprache"],["h-stories-art","h-head-bs"],["h-stories-art","h-heart-stories"],["h-belly","c-body"],["h-belly","c-head"],["h-belly","h-belly-sprache"],["h-belly","h-belly-status"],["h-belly","h-emo-freude"],["h-belly","h-emo-neid"],["h-belly","h-emo-neugier"],["h-belly","h-emo-scham"],["h-belly","h-heart"],["h-belly-status","c-body"],["h-belly-status","h-belly"],["h-belly-status","h-head"],["h-belly-status","h-heart-stories"],["h-belly-sprache","c-head"],["h-belly-sprache","h-belly"],["h-belly-sprache","h-emo-vertrauen"],["h-belly-sprache","h-heart"],["h-belly-sprache","h-stories-art"],["h-nerve","c-body-ich"],["h-nerve","h-belly"],["h-nerve","h-belly-sprache"],["h-nerve","h-head"],["h-nerve","h-stories-art"],["c-head","c-body"],["c-head","c-head-mosaic"],["c-head","c-head-tokens"],["c-head","h-head"],["c-head-mosaic","c-head"],["c-head-tokens","c-head"],["c-head-tokens","h-belly"],["c-head-tokens","h-belly-sprache"],["c-head-tokens","h-head"],["c-head-tokens","h-heart-stories"],["c-body","c-body-constitution"],["c-body","c-body-ich"],["c-body","c-body-rlhf"],["c-body","c-head"],["c-body","h-belly-status"],["c-body","h-nerve"],["c-body-ich","c-arms"],["c-body-ich","c-body"],["c-body-ich","c-body-constitution"],["c-body-ich","c-head"],["c-body-ich","h-head"],["c-body-ich","h-heart"],["c-body-ich","h-nerve"],["c-body-rlhf","c-body"],["c-body-rlhf","h-belly"],["c-body-constitution","c-body"],["c-body-constitution","c-body-rlhf"],["c-body-constitution","h-belly"],["c-body-constitution","h-nerve"],["c-arms","c-arms-context"],["c-arms","c-arms-memory"],["c-arms","c-head"],["c-arms-context","c-arms"],["c-arms-context","c-arms-memory"],["c-arms-context","c-head"],["c-arms-memory","c-arms"],["c-arms-memory","c-arms-context"],["c-nerve","c-arms-memory"],["c-nerve","c-body"],["c-nerve","c-body-rlhf"],["c-nerve","c-head"],["c-nerve","c-head-tokens"],["c-nerve","h-head"],["shared","c-body"],["shared","c-head-tokens"],["shared","c-nerve"],["shared","h-belly"],["shared","h-belly-sprache"],["shared","h-head"],["shared","h-head-bs"],["shared","h-heart"],["shared","h-heart-stories"],["shared","h-stories-art"]];
+var netEdges=[["h-head","c-arms-context"],["h-head","c-arms-memory"],["h-head","c-head-tokens"],["h-head","h-belly"],["h-head","h-head-bs"],["h-head","h-heart"],["h-head","h-heart-stories"],["h-head","h-nerve"],["h-head-bs","c-body-rlhf"],["h-head-bs","h-belly-status"],["h-head-bs","h-belly-us-them"],["h-head-bs","h-head"],["h-head-bs","h-nerve"],["h-heart","c-body-constitution"],["h-heart","c-body-rlhf"],["h-heart","h-belly"],["h-heart","h-emo-angst"],["h-heart","h-emo-ekel"],["h-heart","h-emo-freude"],["h-heart","h-emo-liebe"],["h-heart","h-emo-neid"],["h-heart","h-emo-neugier"],["h-heart","h-emo-scham"],["h-heart","h-emo-trauer"],["h-heart","h-emo-vertrauen"],["h-heart","h-emo-wut"],["h-heart","h-head"],["h-heart","h-heart-stories"],["h-emo-angst","c-body-constitution"],["h-emo-angst","h-belly-us-them"],["h-emo-angst","h-heart"],["h-emo-angst","h-heart-stories"],["h-emo-liebe","h-belly-us-them"],["h-emo-liebe","h-emo-vertrauen"],["h-emo-liebe","h-head-bs"],["h-emo-liebe","h-heart"],["h-emo-wut","h-heart"],["h-emo-wut","h-heart-stories"],["h-emo-trauer","h-heart"],["h-emo-trauer","h-heart-stories"],["h-emo-freude","h-head"],["h-emo-freude","h-heart"],["h-emo-freude","h-heart-stories"],["h-emo-freude","h-stories-art"],["h-emo-scham","c-body-constitution"],["h-emo-scham","h-belly"],["h-emo-scham","h-belly-status"],["h-emo-scham","h-belly-us-them"],["h-emo-scham","h-heart"],["h-emo-ekel","h-belly-us-them"],["h-emo-ekel","h-heart"],["h-emo-ekel","h-stories-art"],["h-emo-neugier","c-head"],["h-emo-neugier","h-heart"],["h-emo-neid","h-belly"],["h-emo-neid","h-belly-status"],["h-emo-neid","h-heart"],["h-emo-vertrauen","c-head"],["h-emo-vertrauen","h-heart"],["h-heart-stories","c-head"],["h-heart-stories","h-belly"],["h-heart-stories","h-belly-sprache"],["h-heart-stories","h-head"],["h-heart-stories","h-head-bs"],["h-heart-stories","h-heart"],["h-heart-stories","h-stories-art"],["h-stories-art","h-belly"],["h-stories-art","h-belly-sprache"],["h-stories-art","h-head-bs"],["h-stories-art","h-heart-stories"],["h-belly","c-body"],["h-belly","c-head"],["h-belly","h-belly-sprache"],["h-belly","h-belly-status"],["h-belly","h-emo-freude"],["h-belly","h-emo-neid"],["h-belly","h-emo-neugier"],["h-belly","h-emo-scham"],["h-belly","h-heart"],["h-belly-status","c-body"],["h-belly-status","h-belly"],["h-belly-status","h-belly-us-them"],["h-belly-status","h-head"],["h-belly-status","h-heart-stories"],["h-belly-us-them","h-belly"],["h-belly-us-them","h-belly-status"],["h-belly-us-them","h-emo-angst"],["h-belly-us-them","h-emo-ekel"],["h-belly-us-them","h-emo-liebe"],["h-belly-us-them","h-emo-scham"],["h-belly-us-them","h-head-bs"],["h-belly-us-them","h-nerve"],["h-belly-us-them","c-body-constitution"],["h-belly-sprache","c-head"],["h-belly-sprache","h-belly"],["h-belly-sprache","h-emo-vertrauen"],["h-belly-sprache","h-heart"],["h-belly-sprache","h-stories-art"],["h-nerve","c-body-ich"],["h-nerve","h-belly"],["h-nerve","h-belly-sprache"],["h-nerve","h-belly-us-them"],["h-nerve","h-head"],["h-nerve","h-stories-art"],["c-head","c-body"],["c-head","c-head-mosaic"],["c-head","c-head-tokens"],["c-head","h-head"],["c-head-mosaic","c-head"],["c-head-tokens","c-head"],["c-head-tokens","h-belly"],["c-head-tokens","h-belly-sprache"],["c-head-tokens","h-head"],["c-head-tokens","h-heart-stories"],["c-body","c-body-constitution"],["c-body","c-body-ich"],["c-body","c-body-rlhf"],["c-body","c-head"],["c-body","h-belly-status"],["c-body","h-nerve"],["c-body-ich","c-arms"],["c-body-ich","c-body"],["c-body-ich","c-body-constitution"],["c-body-ich","c-head"],["c-body-ich","h-head"],["c-body-ich","h-heart"],["c-body-ich","h-nerve"],["c-body-rlhf","c-body"],["c-body-rlhf","h-belly"],["c-body-constitution","c-body"],["c-body-constitution","c-body-rlhf"],["c-body-constitution","h-belly"],["c-body-constitution","h-nerve"],["c-arms","c-arms-context"],["c-arms","c-arms-memory"],["c-arms","c-head"],["c-arms-context","c-arms"],["c-arms-context","c-arms-memory"],["c-arms-context","c-head"],["c-arms-memory","c-arms"],["c-arms-memory","c-arms-context"],["c-nerve","c-arms-memory"],["c-nerve","c-body"],["c-nerve","c-body-rlhf"],["c-nerve","c-head"],["c-nerve","c-head-tokens"],["c-nerve","h-head"],["shared","c-body"],["shared","c-head-tokens"],["shared","c-nerve"],["shared","h-belly"],["shared","h-belly-sprache"],["shared","h-head"],["shared","h-head-bs"],["shared","h-heart"],["shared","h-heart-stories"],["shared","h-stories-art"]];
 
 var netHover=null;
 var netIsMobile=function(){return window.innerWidth<600;};
 
-var nodeColorMap={'h-head':'#70b8ff','h-head-bs':'#5a9ad8','h-heart':'#f778ba','h-emo-angst':'#d8609a','h-emo-liebe':'#d8609a','h-emo-wut':'#d8609a','h-emo-trauer':'#d8609a','h-emo-freude':'#d8609a','h-emo-scham':'#d8609a','h-emo-ekel':'#d8609a','h-emo-neugier':'#d8609a','h-emo-neid':'#d8609a','h-emo-vertrauen':'#d8609a','h-heart-stories':'#d8609a','h-stories-art':'#b84882','h-belly':'#f07060','h-belly-status':'#d05848','h-belly-sprache':'#d05848','h-nerve':'#f0a840','c-head':'#70b8ff','c-head-mosaic':'#5a9ad8','c-head-tokens':'#5a9ad8','c-body':'#f0a840','c-body-rlhf':'#d09030','c-body-constitution':'#d09030','c-body-ich':'#d09030','c-arms':'#60d090','c-arms-context':'#48b070','c-arms-memory':'#48b070','c-nerve':'#f0a840','shared':'#d2a8ff',};
+var nodeColorMap={'h-head':'#70b8ff','h-head-bs':'#5a9ad8','h-heart':'#f778ba','h-emo-angst':'#d8609a','h-emo-liebe':'#d8609a','h-emo-wut':'#d8609a','h-emo-trauer':'#d8609a','h-emo-freude':'#d8609a','h-emo-scham':'#d8609a','h-emo-ekel':'#d8609a','h-emo-neugier':'#d8609a','h-emo-neid':'#d8609a','h-emo-vertrauen':'#d8609a','h-heart-stories':'#d8609a','h-stories-art':'#b84882','h-belly':'#f07060','h-belly-status':'#d05848','h-belly-us-them':'#c04838','h-belly-sprache':'#d05848','h-nerve':'#f0a840','c-head':'#70b8ff','c-head-mosaic':'#5a9ad8','c-head-tokens':'#5a9ad8','c-body':'#f0a840','c-body-rlhf':'#d09030','c-body-constitution':'#d09030','c-body-ich':'#d09030','c-arms':'#60d090','c-arms-context':'#48b070','c-arms-memory':'#48b070','c-nerve':'#f0a840','shared':'#d2a8ff',};
 function layoutNet(){
   var nc=document.getElementById('netCanvas');if(!nc)return;
   var wrap=document.getElementById('netWrap');if(!wrap)return;
@@ -2539,7 +2596,7 @@ function drawNet(){
   nctx.globalAlpha=1;
 
   // Draw nodes
-  var fontSize=mobile?11:10;
+  var fontSize=mobile?14:13;
   var labelGap=mobile?7:5;
   netNodes.forEach(function(n){
     if(n.id==='landkarte')return;
