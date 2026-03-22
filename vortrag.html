@@ -27,9 +27,9 @@ body{background:#080e1a;font-family:'Segoe UI',system-ui,sans-serif;color:#c0d0e
 #main-area{flex:1;position:relative;overflow:hidden;min-width:0;order:1}
 canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 .hint-bottom{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:11px;color:rgba(180,200,220,0.35);pointer-events:none;z-index:1;text-align:center}
-.p{position:absolute;top:0;left:0;width:100%;height:100%;background:#080e1a;display:none;flex-direction:column;overflow-y:auto;z-index:10;padding:20px 24px 60px}
+.p{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(8,14,26,0.88);display:none;flex-direction:column;overflow-y:auto;z-index:10;padding:20px 24px 60px;backdrop-filter:blur(8px)}
 .p.open{display:flex}
-.p-nav{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;background:#080e1a;padding:4px 0 8px}
+.p-nav{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;background:rgba(8,14,26,0.92);padding:4px 0 8px;backdrop-filter:blur(8px)}
 .p-nav button{padding:5px 12px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);background:rgba(20,28,42,0.95);color:#7aa8cc;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.15s}
 .p-nav button:hover{background:rgba(30,50,80,0.8);color:#a0cce8}
 .p-crumb{font-size:11px;color:rgba(180,200,220,0.3)}
@@ -2001,7 +2001,7 @@ function drawOctopus(cx,cy){
 
 // ===================== MAIN DRAW LOOP (adapted for vortrag) =====================
 function draw(){
-  ctx.fillStyle='rgba(8,14,26,0.85)';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='rgba(8,14,26,0.7)';ctx.fillRect(0,0,W,H);
 
   // Stars
   for(var i=0;i<stars.length;i++){var s=stars[i];s.x+=s.dx;if(s.x<0)s.x=1;if(s.x>1)s.x=0;
@@ -2379,7 +2379,7 @@ window.addEventListener('resize',function(){if(document.getElementById('netzwerk
   window.addEventListener('resize', bgResize);
 
   const pts = [];
-  const N = 60;
+  const N = 80;
   for (let i = 0; i < N; i++){
     const side = i < N/3 ? 0 : i < N*2/3 ? 1 : 2;
     pts.push({
@@ -2411,8 +2411,8 @@ window.addEventListener('resize',function(){if(document.getElementById('netzwerk
         const a=pts[i],b=pts[j];
         const dx=(a.x-b.x)*bW,dy=(a.y-b.y)*bH;
         const dist=Math.sqrt(dx*dx+dy*dy);
-        if(dist<120&&a.side!==b.side){
-          const al=(1-dist/120)*0.06;
+        if(dist<150&&a.side!==b.side){
+          const al=(1-dist/150)*0.1;
           bgX.strokeStyle='rgba(192,144,240,'+al+')';
           bgX.lineWidth=0.5;
           bgX.beginPath();
@@ -2428,16 +2428,16 @@ window.addEventListener('resize',function(){if(document.getElementById('netzwerk
       if(p.x<-0.05)p.x=1.05;if(p.x>1.05)p.x=-0.05;
       if(p.y<-0.05)p.y=1.05;if(p.y>1.05)p.y=-0.05;
       const pulse=0.7+Math.sin(bt*2+p.phase)*0.3;
-      const alpha=0.15*pulse;
+      const alpha=0.3*pulse;
       const px=p.x*bW,py=p.y*bH;
-      const glow=bgX.createRadialGradient(px,py,0,px,py,p.r*8);
-      glow.addColorStop(0,gc(p.side,alpha*0.5));
+      const glow=bgX.createRadialGradient(px,py,0,px,py,p.r*12);
+      glow.addColorStop(0,gc(p.side,alpha*0.6));
       glow.addColorStop(1,gc(p.side,0));
       bgX.fillStyle=glow;
-      bgX.fillRect(px-p.r*8,py-p.r*8,p.r*16,p.r*16);
+      bgX.fillRect(px-p.r*12,py-p.r*12,p.r*24,p.r*24);
       bgX.beginPath();
       bgX.arc(px,py,p.r*pulse,0,Math.PI*2);
-      bgX.fillStyle=gc(p.side,alpha*2);
+      bgX.fillStyle=gc(p.side,alpha*2.5);
       bgX.fill();
     }
     requestAnimationFrame(bgDraw);
