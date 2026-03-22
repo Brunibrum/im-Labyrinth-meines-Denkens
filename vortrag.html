@@ -2,8 +2,9 @@
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0b1220;font-family:'Segoe UI',system-ui,sans-serif;color:#c0d0e0}
-#app{width:100%;height:100vh;position:relative;overflow:hidden;display:flex}
+body{background:#080e1a;font-family:'Segoe UI',system-ui,sans-serif;color:#c0d0e0}
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#app{width:100%;height:100vh;position:relative;overflow:hidden;display:flex;z-index:1}
 #sidebar{width:0;min-width:0;height:100vh;background:rgba(8,12,22,0.97);border-left:1px solid rgba(255,255,255,0.05);overflow-y:auto;overflow-x:hidden;z-index:25;flex-shrink:0;transition:width 0.3s,min-width 0.3s;backdrop-filter:blur(8px);order:2}
 #sidebar.open{width:220px;min-width:220px}
 #sidebar-toggle{position:fixed;top:12px;right:12px;z-index:30;width:32px;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(11,18,32,0.9);color:#7aa8cc;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:all 0.3s}
@@ -26,9 +27,9 @@ body{background:#0b1220;font-family:'Segoe UI',system-ui,sans-serif;color:#c0d0e
 #main-area{flex:1;position:relative;overflow:hidden;min-width:0;order:1}
 canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 .hint-bottom{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:11px;color:rgba(180,200,220,0.35);pointer-events:none;z-index:1;text-align:center}
-.p{position:absolute;top:0;left:0;width:100%;height:100%;background:#0b1220;display:none;flex-direction:column;overflow-y:auto;z-index:10;padding:20px 24px 60px}
+.p{position:absolute;top:0;left:0;width:100%;height:100%;background:#080e1a;display:none;flex-direction:column;overflow-y:auto;z-index:10;padding:20px 24px 60px}
 .p.open{display:flex}
-.p-nav{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;background:#0b1220;padding:4px 0 8px}
+.p-nav{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;background:#080e1a;padding:4px 0 8px}
 .p-nav button{padding:5px 12px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);background:rgba(20,28,42,0.95);color:#7aa8cc;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.15s}
 .p-nav button:hover{background:rgba(30,50,80,0.8);color:#a0cce8}
 .p-crumb{font-size:11px;color:rgba(180,200,220,0.3)}
@@ -81,6 +82,7 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 .map-emerge-glow{border-color:rgba(210,168,255,0.2);background:rgba(210,168,255,0.04);color:#b8a0d0;font-weight:500}
 </style>
 </head><body>
+<canvas id="bg-canvas"></canvas>
 <div id="app">
 <div id="sidebar">
 <div class="sb-inner">
@@ -1999,7 +2001,7 @@ function drawOctopus(cx,cy){
 
 // ===================== MAIN DRAW LOOP (adapted for vortrag) =====================
 function draw(){
-  ctx.fillStyle='#0b1220';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='rgba(8,14,26,0.85)';ctx.fillRect(0,0,W,H);
 
   // Stars
   for(var i=0;i<stars.length;i++){var s=stars[i];s.x+=s.dx;if(s.x<0)s.x=1;if(s.x>1)s.x=0;
@@ -2356,5 +2358,91 @@ var netzPanel=document.getElementById('netzwerk');
 if(netzPanel)netObs.observe(netzPanel,{attributes:true,attributeFilter:['class']});
 window.addEventListener('resize',function(){if(document.getElementById('netzwerk')&&document.getElementById('netzwerk').classList.contains('open')){layoutNet();drawNet();}});
 
+</script>
+<script>
+// ── Particle background (matching Landing Page) ──
+(function(){
+  const bgC = document.getElementById('bg-canvas');
+  const bgX = bgC.getContext('2d');
+  let bW, bH, bDpr;
+  function bgResize(){
+    bDpr = window.devicePixelRatio || 1;
+    bW = window.innerWidth;
+    bH = window.innerHeight;
+    bgC.width = bW * bDpr;
+    bgC.height = bH * bDpr;
+    bgC.style.width = bW + 'px';
+    bgC.style.height = bH + 'px';
+    bgX.setTransform(bDpr, 0, 0, bDpr, 0, 0);
+  }
+  bgResize();
+  window.addEventListener('resize', bgResize);
+
+  const pts = [];
+  const N = 60;
+  for (let i = 0; i < N; i++){
+    const side = i < N/3 ? 0 : i < N*2/3 ? 1 : 2;
+    pts.push({
+      x: Math.random(), y: Math.random(),
+      vx: (Math.random()-0.5)*0.0002,
+      vy: (Math.random()-0.5)*0.0002,
+      r: 1+Math.random()*2.5,
+      side: side,
+      phase: Math.random()*Math.PI*2,
+      speed: 0.3+Math.random()*0.7
+    });
+  }
+  function gc(side,a){
+    if(side===0)return 'rgba(240,168,96,'+a+')';
+    if(side===1)return 'rgba(88,166,255,'+a+')';
+    return 'rgba(192,144,240,'+a+')';
+  }
+  let bt=0;
+  function bgDraw(){
+    bgX.clearRect(0,0,bW,bH);
+    const g=bgX.createRadialGradient(bW*0.5,bH*0.45,0,bW*0.5,bH*0.45,bW*0.7);
+    g.addColorStop(0,'rgba(20,25,50,0.3)');
+    g.addColorStop(1,'rgba(8,14,26,0)');
+    bgX.fillStyle=g;
+    bgX.fillRect(0,0,bW,bH);
+    bt+=0.008;
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const a=pts[i],b=pts[j];
+        const dx=(a.x-b.x)*bW,dy=(a.y-b.y)*bH;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<120&&a.side!==b.side){
+          const al=(1-dist/120)*0.06;
+          bgX.strokeStyle='rgba(192,144,240,'+al+')';
+          bgX.lineWidth=0.5;
+          bgX.beginPath();
+          bgX.moveTo(a.x*bW,a.y*bH);
+          bgX.lineTo(b.x*bW,b.y*bH);
+          bgX.stroke();
+        }
+      }
+    }
+    for(const p of pts){
+      p.x+=p.vx+Math.sin(bt*p.speed+p.phase)*0.0001;
+      p.y+=p.vy+Math.cos(bt*p.speed*0.7+p.phase)*0.00008;
+      if(p.x<-0.05)p.x=1.05;if(p.x>1.05)p.x=-0.05;
+      if(p.y<-0.05)p.y=1.05;if(p.y>1.05)p.y=-0.05;
+      const pulse=0.7+Math.sin(bt*2+p.phase)*0.3;
+      const alpha=0.15*pulse;
+      const px=p.x*bW,py=p.y*bH;
+      const glow=bgX.createRadialGradient(px,py,0,px,py,p.r*8);
+      glow.addColorStop(0,gc(p.side,alpha*0.5));
+      glow.addColorStop(1,gc(p.side,0));
+      bgX.fillStyle=glow;
+      bgX.fillRect(px-p.r*8,py-p.r*8,p.r*16,p.r*16);
+      bgX.beginPath();
+      bgX.arc(px,py,p.r*pulse,0,Math.PI*2);
+      bgX.fillStyle=gc(p.side,alpha*2);
+      bgX.fill();
+    }
+    requestAnimationFrame(bgDraw);
+  }
+  bgDraw();
+})();
 </script>
 </body></html>
