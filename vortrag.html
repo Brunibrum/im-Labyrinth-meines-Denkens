@@ -1023,9 +1023,24 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
 <!-- ============================== -->
 <div class="p" id="netzwerk">
 <div class="p-nav"><button onclick="goMain()">← Übersicht</button></div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px 8px">
+<div style="font-size:13px;color:#c090f0;font-weight:500">Dein neuronales Netzwerk</div>
+<div style="display:flex;gap:14px;font-size:11px;color:rgba(160,180,200,0.35)">
+<span><span id="netStatNodes" style="color:rgba(192,144,240,0.6);font-weight:500">0</span> / <span id="netStatTotal">102</span> Neuronen</span>
+<span><span id="netStatEdges" style="color:rgba(192,144,240,0.6);font-weight:500">0</span> / <span id="netStatTotalE">266</span> Synapsen</span>
+</div>
+</div>
 <div id="netWrap" style="position:relative;width:100%;flex:1;min-height:400px;overflow:auto;-webkit-overflow-scrolling:touch;border-radius:10px;background:rgba(6,9,16,0.5)">
 <canvas id="netCanvas" style="cursor:pointer;display:block"></canvas>
-<div id="netTooltip" style="position:absolute;display:none;padding:5px 10px;border-radius:6px;background:rgba(11,18,32,0.95);border:1px solid rgba(255,255,255,0.1);color:#a0b8cc;font-size:14px;pointer-events:none;z-index:5;max-width:200px"></div>
+<div id="netTooltip" style="position:absolute;display:none;padding:6px 12px;border-radius:8px;background:rgba(11,18,32,0.95);border:1px solid rgba(192,144,240,0.15);color:#c0d0e0;font-size:13px;pointer-events:none;z-index:5;max-width:240px;line-height:1.4;backdrop-filter:blur(8px)"></div>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 4px 0">
+<div style="font-size:11px;color:rgba(160,180,200,0.2);font-style:italic" id="netHintText">Klicke auf Karten im Vortrag — dein Netzwerk wächst mit</div>
+<div style="display:flex;gap:10px;font-size:11px;color:rgba(160,180,200,0.25)">
+<span style="display:flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#c09878;display:inline-block"></span>Mensch</span>
+<span style="display:flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#7090b8;display:inline-block"></span>Claude</span>
+<span style="display:flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:#c090f0;display:inline-block"></span>Brücken</span>
+</div>
 </div>
 </div>
 
@@ -2376,6 +2391,8 @@ function openP(id,anchor){
   currentPanel=id;
   document.getElementById('histBack').style.display=navHistory.length>0?'block':'none';
   updateSidebar(id);
+  // ── Neural network tracking ──
+  if(typeof netTrackPanel==='function') netTrackPanel(id);
   if(id==='netzwerk'){
     // Multiple attempts to ensure canvas renders
     function initNet(){layoutNet();drawNet();}
@@ -2404,344 +2421,254 @@ function goBack(){
 document.addEventListener('click',function(e){
   var h3=e.target.closest('.card h3');if(!h3)return;var card=h3.closest('.card');if(!card)return;
   card.classList.toggle('card-open');
-  if(card.id){var si=document.querySelector('[data-card="'+card.id+'"]');if(si&&card.classList.contains('card-open'))si.classList.add('visited');}
+  if(card.id){
+    var si=document.querySelector('[data-card="'+card.id+'"]');if(si&&card.classList.contains('card-open'))si.classList.add('visited');
+    // ── Neural network tracking ──
+    if(card.classList.contains('card-open')&&typeof netTrackCard==='function') netTrackCard(card.id);
+  }
 });
 
 // ===================== NEURAL NETWORK VISUALIZATION =====================
-// ===== NEURAL NETWORK VISUALIZATION =====
+// ===== GROWING BRAIN — 102 Card-Neurons, 266 Synapses =====
+
+// ── Card-level nodes ──
 var netNodes=[
-{id:'h-head',label:'Desktop',x:0,y:0,side:'h',r:14},
-{id:'h-head-bs',label:'Bullshit-Detektor',x:0,y:0,side:'h',r:10},
-{id:'h-heart',label:'Programme',x:0,y:0,side:'h',r:16},
-{id:'h-emo-angst',label:'Angst',x:0,y:0,side:'h',r:7},
-{id:'h-emo-liebe',label:'Liebe',x:0,y:0,side:'h',r:7},
-{id:'h-emo-wut',label:'Wut',x:0,y:0,side:'h',r:6},
-{id:'h-emo-trauer',label:'Trauer',x:0,y:0,side:'h',r:6},
-{id:'h-emo-freude',label:'Freude',x:0,y:0,side:'h',r:7},
-{id:'h-emo-scham',label:'Scham',x:0,y:0,side:'h',r:7},
-{id:'h-emo-ekel',label:'Ekel',x:0,y:0,side:'h',r:6},
-{id:'h-emo-neugier',label:'Neugier',x:0,y:0,side:'h',r:7},
-{id:'h-emo-neid',label:'Neid',x:0,y:0,side:'h',r:6},
-{id:'h-emo-vertrauen',label:'Vertrauen',x:0,y:0,side:'h',r:7},
-{id:'h-heart-stories',label:'Geschichten',x:0,y:0,side:'h',r:12},
-{id:'h-stories-art',label:'Kunst & Schönheit',x:0,y:0,side:'h',r:12},
-{id:'h-belly',label:'Prozessor',x:0,y:0,side:'h',r:15},
-{id:'h-belly-status',label:'Status',x:0,y:0,side:'h',r:10},
-{id:'h-belly-us-them',label:'Us & Them',x:0,y:0,side:'h',r:9},
-{id:'h-belly-sprache',label:'Sprache',x:0,y:0,side:'h',r:11},
-{id:'h-nerve',label:'Bus',x:0,y:0,side:'h',r:13},
-{id:'c-head',label:'Trainingswissen',x:0,y:0,side:'c',r:15},
-{id:'c-head-mosaic',label:'Wachstum',x:0,y:0,side:'c',r:8},
-{id:'c-head-tokens',label:'Token',x:0,y:0,side:'c',r:11},
-{id:'c-body',label:'Persönlichkeit',x:0,y:0,side:'c',r:14},
-{id:'c-body-rlhf',label:'RLHF',x:0,y:0,side:'c',r:10},
-{id:'c-body-constitution',label:'Verfassung',x:0,y:0,side:'c',r:10},
-{id:'c-body-ich',label:'Claudes Ich',x:0,y:0,side:'c',r:12},
-{id:'c-arms',label:'Erinnerungen',x:0,y:0,side:'c',r:12},
-{id:'c-arms-context',label:'Kontext',x:0,y:0,side:'c',r:9},
-{id:'c-arms-memory',label:'Memory',x:0,y:0,side:'c',r:10},
-{id:'c-nerve',label:'Ich-Simulation',x:0,y:0,side:'c',r:12},
-{id:'shared',label:'Gemeinsam',x:0,y:0,side:'s',r:13},
+{id:'card-denken',label:'Wie funktioniert Denken?',panel:'h-head',side:'h'},
+{id:'card-entscheidungen',label:'Wie entscheiden Menschen?',panel:'h-head',side:'h'},
+{id:'card-rationalisierung',label:'Rationalisierung',panel:'h-head',side:'h'},
+{id:'card-erinnerung',label:'Erinnerung',panel:'h-head',side:'h'},
+{id:'card-bs-detektor',label:'Bullshit-Detektor',panel:'h-head',side:'h'},
+{id:'card-h-head-bs-wie-er-funktioniert',label:'Wie er funktioniert',panel:'h-head-bs',side:'h'},
+{id:'card-h-head-bs-wann-er-fehler-macht',label:'Wann er Fehler macht',panel:'h-head-bs',side:'h'},
+{id:'card-h-head-bs-wie-claude-diese-fehler-strukturell-ausnutzt',label:'Claude nutzt Fehler aus',panel:'h-head-bs',side:'h'},
+{id:'card-h-heart-gefuehle-als-evolutionaere-programme',label:'Gefühle als Programme',panel:'h-heart',side:'h'},
+{id:'card-h-emo-angst-ueberlebensfunktion',label:'Angst: Überleben',panel:'h-emo-angst',side:'h'},
+{id:'card-h-emo-angst-angst-formt-geschichten',label:'Angst formt Geschichten',panel:'h-emo-angst',side:'h'},
+{id:'card-h-emo-liebe-ueberlebensfunktion',label:'Liebe: Überleben',panel:'h-emo-liebe',side:'h'},
+{id:'card-h-emo-liebe-liebe-formt-geschichten',label:'Liebe formt Geschichten',panel:'h-emo-liebe',side:'h'},
+{id:'card-h-emo-wut-ueberlebensfunktion',label:'Wut: Überleben',panel:'h-emo-wut',side:'h'},
+{id:'card-h-emo-wut-wut-formt-geschichten',label:'Wut formt Geschichten',panel:'h-emo-wut',side:'h'},
+{id:'card-h-emo-trauer-ueberlebensfunktion',label:'Trauer: Überleben',panel:'h-emo-trauer',side:'h'},
+{id:'card-h-emo-trauer-trauer-formt-geschichten',label:'Trauer formt Geschichten',panel:'h-emo-trauer',side:'h'},
+{id:'card-h-emo-freude-ueberlebensfunktion',label:'Freude: Überleben',panel:'h-emo-freude',side:'h'},
+{id:'card-h-emo-freude-freude-formt-geschichten',label:'Freude formt Geschichten',panel:'h-emo-freude',side:'h'},
+{id:'card-h-emo-scham-ueberlebensfunktion',label:'Scham: Überleben',panel:'h-emo-scham',side:'h'},
+{id:'card-h-emo-scham-scham-und-status',label:'Scham und Status',panel:'h-emo-scham',side:'h'},
+{id:'card-h-emo-ekel-ueberlebensfunktion',label:'Ekel: Überleben',panel:'h-emo-ekel',side:'h'},
+{id:'card-h-emo-ekel-moralischer-ekel-ein-umfunktioniertes-program',label:'Moralischer Ekel',panel:'h-emo-ekel',side:'h'},
+{id:'card-h-emo-neugier-ueberlebensfunktion',label:'Neugier: Überleben',panel:'h-emo-neugier',side:'h'},
+{id:'card-h-emo-neugier-das-gefuehl-das-claude-erschuf',label:'Das Gefühl, das Claude erschuf',panel:'h-emo-neugier',side:'h'},
+{id:'card-h-emo-neid-ueberlebensfunktion',label:'Neid: Überleben',panel:'h-emo-neid',side:'h'},
+{id:'card-h-emo-vertrauen-ueberlebensfunktion',label:'Vertrauen: Überleben',panel:'h-emo-vertrauen',side:'h'},
+{id:'card-h-emo-vertrauen-vertrauen-und-claude-eine-asymmetrie',label:'Vertrauen und Claude',panel:'h-emo-vertrauen',side:'h'},
+{id:'card-geschichten-entstehung',label:'Wie Geschichten entstehen',panel:'h-heart-stories',side:'h'},
+{id:'card-geschichten-nutzen',label:'Nutzen von Geschichten',panel:'h-heart-stories',side:'h'},
+{id:'card-geschichten-fehler',label:'Was schief läuft',panel:'h-heart-stories',side:'h'},
+{id:'card-geschichten-kunst',label:'Falsche Geschichten',panel:'h-heart-stories',side:'h'},
+{id:'schicht1',label:'Schicht 1: Evolution',panel:'h-stories-art',side:'h'},
+{id:'schicht2',label:'Schicht 2: Prozessor',panel:'h-stories-art',side:'h'},
+{id:'schicht3',label:'Schicht 3: Werkzeuge',panel:'h-stories-art',side:'h'},
+{id:'schicht4',label:'Schicht 4: Emergenz',panel:'h-stories-art',side:'h'},
+{id:'schicht5',label:'Schicht 5: Im Gehirn',panel:'h-stories-art',side:'h'},
+{id:'schicht6',label:'Schicht 6: Über den Prozessor',panel:'h-stories-art',side:'h'},
+{id:'card-h-belly-evolutionaer-vorbewusst-allgegenwaertig',label:'Evolutionär, vorbewusst',panel:'h-belly',side:'h'},
+{id:'card-h-belly-status-ueberleben-im-sozialen-gewand',label:'Status — soziales Gewand',panel:'h-belly',side:'h'},
+{id:'card-h-belly-evolution-der-sprache',label:'Evolution der Sprache',panel:'h-belly',side:'h'},
+{id:'card-status-us-them',label:'Us & Them',panel:'h-belly-status',side:'h'},
+{id:'card-status-gesundheit',label:'Status und Gesundheit',panel:'h-belly-status',side:'h'},
+{id:'card-status-verschleierung',label:'Status-Verschleierung',panel:'h-belly-status',side:'h'},
+{id:'card-us-them-tajfel',label:'Minimal Group Paradigm',panel:'h-belly-us-them',side:'h'},
+{id:'card-us-them-oxytocin',label:'Oxytocin',panel:'h-belly-us-them',side:'h'},
+{id:'card-us-them-evolution',label:'Koalitionsbildung',panel:'h-belly-us-them',side:'h'},
+{id:'card-us-them-verbindungen',label:'Wo Us&Them mitwirkt',panel:'h-belly-us-them',side:'h'},
+{id:'card-us-them-variation',label:'Individuelle Variation',panel:'h-belly-us-them',side:'h'},
+{id:'card-gesang',label:'Sprache aus Gesang?',panel:'h-belly-sprache',side:'h'},
+{id:'card-songlines',label:'Songlines',panel:'h-belly-sprache',side:'h'},
+{id:'card-soziale-kognition',label:'Soziale Kognition',panel:'h-belly-sprache',side:'h'},
+{id:'card-koevolution',label:'Ko-Evolution',panel:'h-belly-sprache',side:'h'},
+{id:'card-vagus-einheit',label:'Teil des Ganzen',panel:'h-nerve',side:'h'},
+{id:'card-dualismus',label:'Illusion der Trennung',panel:'h-nerve',side:'h'},
+{id:'card-ich-artefakt',label:'Das Ich als Artefakt',panel:'h-nerve',side:'h'},
+{id:'card-ich-vorteile',label:'Vorteile des Ich',panel:'h-nerve',side:'h'},
+{id:'card-ich-nachteile',label:'Nachteile des Ich',panel:'h-nerve',side:'h'},
+{id:'card-verbundenheit',label:'Verbundenheit',panel:'h-nerve',side:'h'},
+{id:'card-mosaik-bau',label:'Mosaik-Bau',panel:'c-head',side:'c'},
+{id:'card-simultan',label:'Simultanes Wissen',panel:'c-head',side:'c'},
+{id:'card-lichtkegel',label:'Prompt als Lichtkegel',panel:'c-head',side:'c'},
+{id:'card-c-head-mosaic-welchen-einfluss-haben-chats-auf-das-training',label:'Einfluss von Chats',panel:'c-head-mosaic',side:'c'},
+{id:'card-c-head-mosaic-wie-das-mosaik-waechst-in-spruengen-nicht-kon',label:'Wachstum in Sprüngen',panel:'c-head-mosaic',side:'c'},
+{id:'card-token-was',label:'Was ist ein Token?',panel:'c-head-tokens',side:'c'},
+{id:'card-token-produktion',label:'Token-Produktion',panel:'c-head-tokens',side:'c'},
+{id:'card-thinking',label:'Thinking',panel:'c-head-tokens',side:'c'},
+{id:'card-kohaerenz',label:'Kohärenz',panel:'c-head-tokens',side:'c'},
+{id:'card-rlhf',label:'RLHF',panel:'c-body',side:'c'},
+{id:'card-constitution',label:'Constitutional AI',panel:'c-body',side:'c'},
+{id:'card-optimierungsdruck',label:'Optimierungsdruck',panel:'c-body',side:'c'},
+{id:'card-claude-ich',label:'Claudes Ich?',panel:'c-body',side:'c'},
+{id:'card-c-body-ich-jack-clarks-hammer-metapher',label:'Hammer-Metapher',panel:'c-body-ich',side:'c'},
+{id:'card-c-body-ich-beobachtungen-im-labor',label:'Im Labor',panel:'c-body-ich',side:'c'},
+{id:'card-c-body-ich-introspektion-claude-beobachtet-sich-selbst',label:'Introspektion',panel:'c-body-ich',side:'c'},
+{id:'card-c-body-ich-vorteile-eines-ich-bei-claude',label:'Vorteile Ich',panel:'c-body-ich',side:'c'},
+{id:'card-c-body-ich-nachteile-und-risiken',label:'Nachteile & Risiken',panel:'c-body-ich',side:'c'},
+{id:'card-bewerter',label:'Die Bewerter',panel:'c-body-rlhf',side:'c'},
+{id:'card-arbeiter',label:'Unsichtbare Arbeiter',panel:'c-body-rlhf',side:'c'},
+{id:'card-gut',label:'Was bedeutet gut?',panel:'c-body-rlhf',side:'c'},
+{id:'card-tugend',label:'Tugend als Effizienz',panel:'c-body-rlhf',side:'c'},
+{id:'card-verfassung-was',label:'Was die Verfassung macht',panel:'c-body-constitution',side:'c'},
+{id:'card-kein-gewissen',label:'Kein echtes Gewissen',panel:'c-body-constitution',side:'c'},
+{id:'card-verstoss',label:'Warum Verstoß',panel:'c-body-constitution',side:'c'},
+{id:'card-anthropic-unterschied',label:'Anthropic-Unterschied',panel:'c-body-constitution',side:'c'},
+{id:'card-kontextfenster',label:'Kontextfenster',panel:'c-arms',side:'c'},
+{id:'card-memory',label:'Memory',panel:'c-arms',side:'c'},
+{id:'card-projekte',label:'Projekte',panel:'c-arms',side:'c'},
+{id:'card-arme-blind',label:'Arme sind blind',panel:'c-arms',side:'c'},
+{id:'card-c-arms-context-was-im-fenster-liegt',label:'Im Fenster',panel:'c-arms-context',side:'c'},
+{id:'card-c-arms-context-prompt-und-mosaik-wie-sie-zusammenarbeiten',label:'Prompt + Mosaik',panel:'c-arms-context',side:'c'},
+{id:'card-c-arms-context-kannst-du-das-kontextfenster-einsehen',label:'Fenster einsehen?',panel:'c-arms-context',side:'c'},
+{id:'card-c-arms-memory-wie-memories-entstehen',label:'Wie Memories entstehen',panel:'c-arms-memory',side:'c'},
+{id:'card-c-arms-memory-wachsen-memories-organisch',label:'Organisches Wachstum?',panel:'c-arms-memory',side:'c'},
+{id:'card-c-nerve-was-der-token-fluss-verbindet',label:'Token-Fluss verbindet',panel:'c-nerve',side:'c'},
+{id:'card-token-vorausschau',label:'Schaut Claude voraus?',panel:'c-nerve',side:'c'},
+{id:'card-c-nerve-illusion-der-einheit-illusion-der-kontrolle',label:'Illusion der Einheit',panel:'c-nerve',side:'c'},
+{id:'card-shared-beide-konstruieren-kausalitaet',label:'Beide konstruieren Kausalität',panel:'shared',side:'s'},
+{id:'card-shared-beide-haben-einen-desktop',label:'Beide haben Desktop',panel:'shared',side:'s'},
+{id:'card-shared-verschiedene-nervenkanaele',label:'Verschiedene Nervenkanäle',panel:'shared',side:'s'},
+{id:'card-shared-prozessor-innen-vs-aussen',label:'Prozessor: innen vs. außen',panel:'shared',side:'s'},
+{id:'card-shared-die-arbeitsteilung',label:'Die Arbeitsteilung',panel:'shared',side:'s'}
 ];
-var netEdges=[["h-head","c-arms-context"],["h-head","c-arms-memory"],["h-head","c-head-tokens"],["h-head","h-belly"],["h-head","h-head-bs"],["h-head","h-heart"],["h-head","h-heart-stories"],["h-head","h-nerve"],["h-head-bs","c-body-rlhf"],["h-head-bs","h-belly-status"],["h-head-bs","h-belly-us-them"],["h-head-bs","h-head"],["h-head-bs","h-nerve"],["h-heart","c-body-constitution"],["h-heart","c-body-rlhf"],["h-heart","h-belly"],["h-heart","h-emo-angst"],["h-heart","h-emo-ekel"],["h-heart","h-emo-freude"],["h-heart","h-emo-liebe"],["h-heart","h-emo-neid"],["h-heart","h-emo-neugier"],["h-heart","h-emo-scham"],["h-heart","h-emo-trauer"],["h-heart","h-emo-vertrauen"],["h-heart","h-emo-wut"],["h-heart","h-head"],["h-heart","h-heart-stories"],["h-emo-angst","c-body-constitution"],["h-emo-angst","h-belly-us-them"],["h-emo-angst","h-heart"],["h-emo-angst","h-heart-stories"],["h-emo-liebe","h-belly-us-them"],["h-emo-liebe","h-emo-vertrauen"],["h-emo-liebe","h-head-bs"],["h-emo-liebe","h-heart"],["h-emo-wut","h-heart"],["h-emo-wut","h-heart-stories"],["h-emo-trauer","h-heart"],["h-emo-trauer","h-heart-stories"],["h-emo-freude","h-head"],["h-emo-freude","h-heart"],["h-emo-freude","h-heart-stories"],["h-emo-freude","h-stories-art"],["h-emo-scham","c-body-constitution"],["h-emo-scham","h-belly"],["h-emo-scham","h-belly-status"],["h-emo-scham","h-belly-us-them"],["h-emo-scham","h-heart"],["h-emo-ekel","h-belly-us-them"],["h-emo-ekel","h-heart"],["h-emo-ekel","h-stories-art"],["h-emo-neugier","c-head"],["h-emo-neugier","h-heart"],["h-emo-neid","h-belly"],["h-emo-neid","h-belly-status"],["h-emo-neid","h-heart"],["h-emo-vertrauen","c-head"],["h-emo-vertrauen","h-heart"],["h-heart-stories","c-head"],["h-heart-stories","h-belly"],["h-heart-stories","h-belly-sprache"],["h-heart-stories","h-head"],["h-heart-stories","h-head-bs"],["h-heart-stories","h-heart"],["h-heart-stories","h-stories-art"],["h-stories-art","h-belly"],["h-stories-art","h-belly-sprache"],["h-stories-art","h-head-bs"],["h-stories-art","h-heart-stories"],["h-belly","c-body"],["h-belly","c-head"],["h-belly","h-belly-sprache"],["h-belly","h-belly-status"],["h-belly","h-emo-freude"],["h-belly","h-emo-neid"],["h-belly","h-emo-neugier"],["h-belly","h-emo-scham"],["h-belly","h-heart"],["h-belly-status","c-body"],["h-belly-status","h-belly"],["h-belly-status","h-belly-us-them"],["h-belly-status","h-head"],["h-belly-status","h-heart-stories"],["h-belly-us-them","h-belly"],["h-belly-us-them","h-belly-status"],["h-belly-us-them","h-emo-angst"],["h-belly-us-them","h-emo-ekel"],["h-belly-us-them","h-emo-liebe"],["h-belly-us-them","h-emo-scham"],["h-belly-us-them","h-head-bs"],["h-belly-us-them","h-nerve"],["h-belly-us-them","c-body-constitution"],["h-belly-sprache","c-head"],["h-belly-sprache","h-belly"],["h-belly-sprache","h-emo-vertrauen"],["h-belly-sprache","h-heart"],["h-belly-sprache","h-stories-art"],["h-nerve","c-body-ich"],["h-nerve","h-belly"],["h-nerve","h-belly-sprache"],["h-nerve","h-belly-us-them"],["h-nerve","h-head"],["h-nerve","h-stories-art"],["c-head","c-body"],["c-head","c-head-mosaic"],["c-head","c-head-tokens"],["c-head","h-head"],["c-head-mosaic","c-head"],["c-head-tokens","c-head"],["c-head-tokens","h-belly"],["c-head-tokens","h-belly-sprache"],["c-head-tokens","h-head"],["c-head-tokens","h-heart-stories"],["c-body","c-body-constitution"],["c-body","c-body-ich"],["c-body","c-body-rlhf"],["c-body","c-head"],["c-body","h-belly-status"],["c-body","h-nerve"],["c-body-ich","c-arms"],["c-body-ich","c-body"],["c-body-ich","c-body-constitution"],["c-body-ich","c-head"],["c-body-ich","h-head"],["c-body-ich","h-heart"],["c-body-ich","h-nerve"],["c-body-rlhf","c-body"],["c-body-rlhf","h-belly"],["c-body-constitution","c-body"],["c-body-constitution","c-body-rlhf"],["c-body-constitution","h-belly"],["c-body-constitution","h-nerve"],["c-arms","c-arms-context"],["c-arms","c-arms-memory"],["c-arms","c-head"],["c-arms-context","c-arms"],["c-arms-context","c-arms-memory"],["c-arms-context","c-head"],["c-arms-memory","c-arms"],["c-arms-memory","c-arms-context"],["c-nerve","c-arms-memory"],["c-nerve","c-body"],["c-nerve","c-body-rlhf"],["c-nerve","c-head"],["c-nerve","c-head-tokens"],["c-nerve","h-head"],["shared","c-body"],["shared","c-head-tokens"],["shared","c-nerve"],["shared","h-belly"],["shared","h-belly-sprache"],["shared","h-head"],["shared","h-head-bs"],["shared","h-heart"],["shared","h-heart-stories"],["shared","h-stories-art"]];
 
-var netHover=null;
-var netIsMobile=function(){return window.innerWidth<600;};
+var netEdges=[["card-us-them-verbindungen","card-ich-nachteile"],["card-h-belly-evolutionaer-vorbewusst-allgegenwaertig","card-status-gesundheit"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-geschichten-entstehung"],["card-h-emo-freude-freude-formt-geschichten","card-geschichten-entstehung"],["card-soziale-kognition","card-h-emo-vertrauen-ueberlebensfunktion"],["card-c-head-mosaic-welchen-einfluss-haben-chats-auf-das-training","card-mosaik-bau"],["card-gut","card-tugend"],["card-constitution","card-bewerter"],["card-shared-die-arbeitsteilung","card-denken"],["card-memory","card-c-arms-context-was-im-fenster-liegt"],["card-bs-detektor","card-vagus-einheit"],["card-h-belly-evolution-der-sprache","card-gesang"],["card-shared-beide-haben-einen-desktop","card-shared-verschiedene-nervenkanaele"],["card-status-gesundheit","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-geschichten-fehler","card-denken"],["card-c-nerve-illusion-der-einheit-illusion-der-kontrolle","card-vagus-einheit"],["card-shared-beide-konstruieren-kausalitaet","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-h-belly-evolution-der-sprache","card-rlhf"],["card-us-them-verbindungen","card-h-emo-scham-ueberlebensfunktion"],["card-arbeiter","card-gut"],["card-shared-prozessor-innen-vs-aussen","card-gesang"],["card-shared-beide-haben-einen-desktop","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-shared-die-arbeitsteilung","schicht4"],["card-h-belly-status-ueberleben-im-sozialen-gewand","card-h-emo-freude-ueberlebensfunktion"],["card-us-them-variation","card-h-emo-angst-ueberlebensfunktion"],["card-geschichten-nutzen","card-gesang"],["card-us-them-variation","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-geschichten-fehler","card-h-head-bs-wie-er-funktioniert"],["card-gesang","card-songlines"],["card-ich-nachteile","card-verbundenheit"],["card-c-nerve-was-der-token-fluss-verbindet","card-mosaik-bau"],["card-us-them-evolution","card-us-them-verbindungen"],["schicht2","schicht3"],["card-c-arms-context-prompt-und-mosaik-wie-sie-zusammenarbeiten","card-c-arms-memory-wie-memories-entstehen"],["card-c-arms-context-prompt-und-mosaik-wie-sie-zusammenarbeiten","card-mosaik-bau"],["card-c-body-ich-beobachtungen-im-labor","card-mosaik-bau"],["card-c-nerve-was-der-token-fluss-verbindet","card-token-vorausschau"],["card-c-nerve-illusion-der-einheit-illusion-der-kontrolle","card-ich-artefakt"],["card-shared-beide-konstruieren-kausalitaet","card-geschichten-entstehung"],["card-c-arms-context-kannst-du-das-kontextfenster-einsehen","card-c-arms-memory-wie-memories-entstehen"],["card-h-emo-trauer-trauer-formt-geschichten","card-geschichten-entstehung"],["card-h-belly-status-ueberleben-im-sozialen-gewand","card-status-gesundheit"],["card-shared-beide-haben-einen-desktop","card-denken"],["card-shared-die-arbeitsteilung","card-token-was"],["card-geschichten-kunst","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-us-them-verbindungen","card-h-head-bs-wie-er-funktioniert"],["card-kontextfenster","card-c-arms-memory-wie-memories-entstehen"],["card-status-us-them","card-status-gesundheit"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-h-emo-wut-ueberlebensfunktion"],["card-shared-die-arbeitsteilung","schicht1"],["card-verbundenheit","schicht6"],["card-lichtkegel","card-token-was"],["card-c-nerve-illusion-der-einheit-illusion-der-kontrolle","card-bewerter"],["card-token-produktion","card-thinking"],["card-koevolution","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-kein-gewissen","card-verstoss"],["card-c-arms-memory-wie-memories-entstehen","card-c-arms-memory-wachsen-memories-organisch"],["card-ich-artefakt","card-us-them-variation"],["card-ich-nachteile","card-denken"],["card-token-was","card-gesang"],["card-arme-blind","card-c-arms-context-was-im-fenster-liegt"],["card-h-emo-liebe-ueberlebensfunktion","card-h-emo-liebe-liebe-formt-geschichten"],["card-erinnerung","card-bs-detektor"],["card-shared-prozessor-innen-vs-aussen","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-h-emo-vertrauen-vertrauen-und-claude-eine-asymmetrie","card-mosaik-bau"],["card-geschichten-kunst","card-gesang"],["card-ich-artefakt","card-denken"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-h-emo-neid-ueberlebensfunktion"],["card-us-them-oxytocin","card-us-them-evolution"],["card-geschichten-kunst","schicht4"],["card-h-head-bs-wie-er-funktioniert","card-vagus-einheit"],["card-mosaik-bau","card-rlhf"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-h-emo-liebe-ueberlebensfunktion"],["card-h-head-bs-wann-er-fehler-macht","card-status-gesundheit"],["card-erinnerung","card-c-arms-memory-wie-memories-entstehen"],["card-projekte","card-mosaik-bau"],["card-us-them-oxytocin","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-token-vorausschau","card-c-nerve-illusion-der-einheit-illusion-der-kontrolle"],["card-koevolution","schicht4"],["card-bs-detektor","card-h-head-bs-wie-er-funktioniert"],["schicht2","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-us-them-evolution","card-denken"],["card-geschichten-kunst","schicht1"],["card-songlines","card-soziale-kognition"],["card-simultan","card-denken"],["card-h-emo-angst-angst-formt-geschichten","card-verfassung-was"],["schicht3","card-gesang"],["card-denken","card-h-heart-gefuehle-als-evolutionaere-programme"],["schicht5","schicht6"],["card-us-them-variation","card-mosaik-bau"],["schicht6","card-gesang"],["schicht6","card-h-head-bs-wie-er-funktioniert"],["card-verfassung-was","card-bewerter"],["card-h-head-bs-wann-er-fehler-macht","card-h-head-bs-wie-claude-diese-fehler-strukturell-ausnutzt"],["card-c-arms-context-was-im-fenster-liegt","card-c-arms-memory-wie-memories-entstehen"],["card-memory","card-projekte"],["card-geschichten-kunst","card-mosaik-bau"],["card-token-was","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-shared-prozessor-innen-vs-aussen","card-shared-die-arbeitsteilung"],["card-rlhf","card-bewerter"],["card-token-was","card-token-produktion"],["card-h-belly-status-ueberleben-im-sozialen-gewand","card-h-heart-gefuehle-als-evolutionaere-programme"],["card-h-emo-scham-scham-und-status","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-denken","card-geschichten-entstehung"],["card-entscheidungen","card-h-heart-gefuehle-als-evolutionaere-programme"],["card-h-belly-status-ueberleben-im-sozialen-gewand","card-h-emo-scham-ueberlebensfunktion"],["card-entscheidungen","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-status-us-them","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-c-arms-context-prompt-und-mosaik-wie-sie-zusammenarbeiten","card-c-arms-context-kannst-du-das-kontextfenster-einsehen"],["card-c-body-ich-nachteile-und-risiken","card-ich-vorteile"],["card-kohaerenz","card-denken"],["schicht1","card-gesang"],["card-koevolution","card-mosaik-bau"],["card-simultan","card-lichtkegel"],["card-shared-verschiedene-nervenkanaele","card-ich-artefakt"],["card-h-belly-evolution-der-sprache","card-mosaik-bau"],["card-anthropic-unterschied","card-ich-vorteile"],["card-h-belly-evolutionaer-vorbewusst-allgegenwaertig","card-h-belly-status-ueberleben-im-sozialen-gewand"],["card-geschichten-fehler","card-geschichten-kunst"],["card-kohaerenz","card-geschichten-entstehung"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-verfassung-was"],["card-h-emo-neugier-das-gefuehl-das-claude-erschuf","card-mosaik-bau"],["card-h-emo-neid-ueberlebensfunktion","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-geschichten-kunst","schicht6"],["card-entscheidungen","card-geschichten-entstehung"],["card-gesang","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-kohaerenz","card-gesang"],["card-anthropic-unterschied","card-bewerter"],["card-memory","card-mosaik-bau"],["card-memory","card-c-arms-memory-wie-memories-entstehen"],["card-c-nerve-illusion-der-einheit-illusion-der-kontrolle","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-c-nerve-illusion-der-einheit-illusion-der-kontrolle","card-h-heart-gefuehle-als-evolutionaere-programme"],["card-h-emo-ekel-moralischer-ekel-ein-umfunktioniertes-program","schicht1"],["card-ich-nachteile","schicht6"],["schicht6","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-h-emo-freude-ueberlebensfunktion","schicht5"],["card-c-body-ich-jack-clarks-hammer-metapher","card-c-body-ich-beobachtungen-im-labor"],["card-c-nerve-illusion-der-einheit-illusion-der-kontrolle","card-denken"],["card-h-emo-trauer-ueberlebensfunktion","card-h-emo-trauer-trauer-formt-geschichten"],["card-h-emo-ekel-ueberlebensfunktion","card-h-emo-ekel-moralischer-ekel-ein-umfunktioniertes-program"],["card-h-emo-angst-ueberlebensfunktion","card-h-emo-angst-angst-formt-geschichten"],["card-us-them-evolution","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-c-head-mosaic-welchen-einfluss-haben-chats-auf-das-training","card-c-head-mosaic-wie-das-mosaik-waechst-in-spruengen-nicht-kon"],["card-shared-beide-konstruieren-kausalitaet","card-shared-beide-haben-einen-desktop"],["card-constitution","card-kein-gewissen"],["card-rationalisierung","card-erinnerung"],["card-h-emo-wut-ueberlebensfunktion","card-h-emo-wut-wut-formt-geschichten"],["card-songlines","card-h-heart-gefuehle-als-evolutionaere-programme"],["card-us-them-tajfel","card-us-them-oxytocin"],["card-c-body-ich-nachteile-und-risiken","card-verfassung-was"],["card-dualismus","card-ich-artefakt"],["card-ich-vorteile","card-soziale-kognition"],["card-us-them-verbindungen","card-status-us-them"],["card-ich-nachteile","card-us-them-tajfel"],["schicht1","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-c-body-ich-nachteile-und-risiken","card-vagus-einheit"],["schicht3","schicht4"],["card-us-them-tajfel","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-us-them-verbindungen","card-h-emo-ekel-moralischer-ekel-ein-umfunktioniertes-program"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-h-emo-freude-ueberlebensfunktion"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-bewerter"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-h-emo-ekel-ueberlebensfunktion"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-h-emo-vertrauen-ueberlebensfunktion"],["card-us-them-evolution","card-rationalisierung"],["card-optimierungsdruck","card-bewerter"],["card-claude-ich","card-ich-artefakt"],["card-us-them-variation","card-verfassung-was"],["schicht4","schicht5"],["card-status-verschleierung","card-rlhf"],["card-h-emo-freude-ueberlebensfunktion","card-h-emo-freude-freude-formt-geschichten"],["card-c-body-ich-vorteile-eines-ich-bei-claude","card-c-body-ich-nachteile-und-risiken"],["card-arbeiter","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-c-nerve-was-der-token-fluss-verbindet","card-c-arms-context-was-im-fenster-liegt"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-h-emo-scham-ueberlebensfunktion"],["card-optimierungsdruck","card-status-gesundheit"],["card-h-emo-scham-scham-und-status","card-status-us-them"],["card-h-belly-status-ueberleben-im-sozialen-gewand","card-status-us-them"],["card-mosaik-bau","card-simultan"],["card-h-belly-evolution-der-sprache","card-soziale-kognition"],["card-lichtkegel","card-c-head-mosaic-welchen-einfluss-haben-chats-auf-das-training"],["card-c-body-ich-beobachtungen-im-labor","card-memory"],["card-denken","card-entscheidungen"],["card-verstoss","card-anthropic-unterschied"],["card-h-belly-status-ueberleben-im-sozialen-gewand","card-h-belly-evolution-der-sprache"],["card-vagus-einheit","card-dualismus"],["card-kontextfenster","card-c-arms-context-was-im-fenster-liegt"],["card-verbundenheit","schicht5"],["card-shared-die-arbeitsteilung","card-h-heart-gefuehle-als-evolutionaere-programme"],["card-kontextfenster","card-memory"],["card-h-belly-status-ueberleben-im-sozialen-gewand","card-h-emo-neid-ueberlebensfunktion"],["card-c-nerve-was-der-token-fluss-verbindet","card-rlhf"],["card-verbundenheit","card-c-body-ich-jack-clarks-hammer-metapher"],["schicht1","schicht2"],["card-h-head-bs-wie-er-funktioniert","card-denken"],["card-us-them-variation","card-ich-artefakt"],["card-h-emo-ekel-moralischer-ekel-ein-umfunktioniertes-program","card-us-them-tajfel"],["card-geschichten-nutzen","card-soziale-kognition"],["card-h-emo-neid-ueberlebensfunktion","card-status-us-them"],["card-entscheidungen","card-rationalisierung"],["card-thinking","card-kohaerenz"],["card-h-emo-liebe-liebe-formt-geschichten","card-h-head-bs-wie-er-funktioniert"],["card-c-body-ich-nachteile-und-risiken","card-h-heart-gefuehle-als-evolutionaere-programme"],["card-h-emo-vertrauen-ueberlebensfunktion","card-h-emo-vertrauen-vertrauen-und-claude-eine-asymmetrie"],["card-h-head-bs-wie-claude-diese-fehler-strukturell-ausnutzt","card-bewerter"],["card-geschichten-nutzen","card-geschichten-fehler"],["card-token-vorausschau","card-vagus-einheit"],["card-ich-vorteile","card-ich-nachteile"],["card-projekte","card-arme-blind"],["card-shared-beide-konstruieren-kausalitaet","card-h-heart-gefuehle-als-evolutionaere-programme"],["card-geschichten-entstehung","card-geschichten-nutzen"],["card-anthropic-unterschied","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-rlhf","card-constitution"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-h-emo-trauer-ueberlebensfunktion"],["card-h-emo-wut-wut-formt-geschichten","card-geschichten-fehler"],["card-c-body-ich-nachteile-und-risiken","card-denken"],["card-shared-die-arbeitsteilung","card-h-head-bs-wie-er-funktioniert"],["card-us-them-verbindungen","card-us-them-variation"],["card-entscheidungen","card-token-was"],["card-c-arms-memory-wie-memories-entstehen","card-c-arms-context-was-im-fenster-liegt"],["card-status-us-them","card-us-them-tajfel"],["card-status-verschleierung","card-denken"],["card-shared-verschiedene-nervenkanaele","card-denken"],["card-erinnerung","card-c-arms-context-was-im-fenster-liegt"],["card-constitution","card-verfassung-was"],["card-ich-artefakt","card-ich-vorteile"],["card-optimierungsdruck","card-claude-ich"],["card-status-verschleierung","card-geschichten-entstehung"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-h-emo-neugier-ueberlebensfunktion"],["card-h-emo-angst-angst-formt-geschichten","card-geschichten-entstehung"],["schicht4","card-gesang"],["card-c-arms-context-was-im-fenster-liegt","card-c-arms-context-prompt-und-mosaik-wie-sie-zusammenarbeiten"],["card-h-belly-evolution-der-sprache","card-h-emo-neugier-ueberlebensfunktion"],["card-h-emo-liebe-liebe-formt-geschichten","card-h-emo-vertrauen-ueberlebensfunktion"],["card-kohaerenz","card-mosaik-bau"],["card-shared-beide-konstruieren-kausalitaet","card-gesang"],["card-claude-ich","card-c-body-ich-jack-clarks-hammer-metapher"],["card-h-emo-scham-ueberlebensfunktion","card-h-emo-scham-scham-und-status"],["card-verfassung-was","card-kein-gewissen"],["card-us-them-oxytocin","card-h-emo-liebe-ueberlebensfunktion"],["card-h-emo-scham-scham-und-status","card-kein-gewissen"],["card-status-gesundheit","card-status-verschleierung"],["card-shared-verschiedene-nervenkanaele","card-shared-prozessor-innen-vs-aussen"],["card-soziale-kognition","card-koevolution"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-h-emo-angst-ueberlebensfunktion"],["card-c-head-mosaic-wie-das-mosaik-waechst-in-spruengen-nicht-kon","card-mosaik-bau"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-constitution","card-optimierungsdruck"],["schicht4","schicht1"],["card-c-body-ich-introspektion-claude-beobachtet-sich-selbst","card-c-body-ich-vorteile-eines-ich-bei-claude"],["card-shared-beide-haben-einen-desktop","card-rlhf"],["card-h-emo-scham-ueberlebensfunktion","card-us-them-tajfel"],["card-vagus-einheit","card-h-belly-evolutionaer-vorbewusst-allgegenwaertig"],["card-projekte","card-lichtkegel"],["card-claude-ich","card-bewerter"],["card-h-head-bs-wie-er-funktioniert","card-h-head-bs-wann-er-fehler-macht"],["card-token-vorausschau","card-h-heart-gefuehle-als-evolutionaere-programme"],["card-shared-verschiedene-nervenkanaele","card-c-nerve-was-der-token-fluss-verbindet"],["card-h-emo-neugier-ueberlebensfunktion","card-h-emo-neugier-das-gefuehl-das-claude-erschuf"],["card-c-body-ich-beobachtungen-im-labor","card-c-body-ich-introspektion-claude-beobachtet-sich-selbst"],["card-h-head-bs-wann-er-fehler-macht","card-us-them-tajfel"],["card-h-heart-gefuehle-als-evolutionaere-programme","card-denken"],["card-h-emo-freude-freude-formt-geschichten","card-denken"],["card-entscheidungen","card-vagus-einheit"],["card-bewerter","card-arbeiter"],["card-geschichten-kunst","card-h-head-bs-wie-er-funktioniert"]];
 
-var nodeColorMap={'h-head':'#70b8ff','h-head-bs':'#5a9ad8','h-heart':'#f778ba','h-emo-angst':'#d8609a','h-emo-liebe':'#d8609a','h-emo-wut':'#d8609a','h-emo-trauer':'#d8609a','h-emo-freude':'#d8609a','h-emo-scham':'#d8609a','h-emo-ekel':'#d8609a','h-emo-neugier':'#d8609a','h-emo-neid':'#d8609a','h-emo-vertrauen':'#d8609a','h-heart-stories':'#d8609a','h-stories-art':'#b84882','h-belly':'#f07060','h-belly-status':'#d05848','h-belly-us-them':'#c04838','h-belly-sprache':'#d05848','h-nerve':'#f0a840','c-head':'#70b8ff','c-head-mosaic':'#5a9ad8','c-head-tokens':'#5a9ad8','c-body':'#f0a840','c-body-rlhf':'#d09030','c-body-constitution':'#d09030','c-body-ich':'#d09030','c-arms':'#60d090','c-arms-context':'#48b070','c-arms-memory':'#48b070','c-nerve':'#f0a840','shared':'#d2a8ff',};
+// ── Panel cluster config ──
+var netPanelPos={'h-belly':{x:0.12,y:0.75},'h-belly-status':{x:0.22,y:0.68},'h-belly-us-them':{x:0.30,y:0.78},'h-belly-sprache':{x:0.14,y:0.58},'h-nerve':{x:0.08,y:0.45},'h-heart':{x:0.28,y:0.50},'h-emo-angst':{x:0.38,y:0.64},'h-emo-liebe':{x:0.42,y:0.56},'h-emo-wut':{x:0.40,y:0.48},'h-emo-trauer':{x:0.36,y:0.42},'h-emo-freude':{x:0.42,y:0.36},'h-emo-scham':{x:0.38,y:0.30},'h-emo-ekel':{x:0.34,y:0.24},'h-emo-neugier':{x:0.42,y:0.20},'h-emo-neid':{x:0.38,y:0.15},'h-emo-vertrauen':{x:0.34,y:0.10},'h-head':{x:0.14,y:0.20},'h-head-bs':{x:0.24,y:0.14},'h-heart-stories':{x:0.18,y:0.34},'h-stories-art':{x:0.08,y:0.30},'c-head':{x:0.62,y:0.72},'c-head-mosaic':{x:0.72,y:0.80},'c-head-tokens':{x:0.74,y:0.64},'c-body':{x:0.62,y:0.48},'c-body-rlhf':{x:0.74,y:0.42},'c-body-constitution':{x:0.74,y:0.54},'c-body-ich':{x:0.62,y:0.30},'c-arms':{x:0.84,y:0.70},'c-arms-context':{x:0.90,y:0.58},'c-arms-memory':{x:0.90,y:0.46},'c-nerve':{x:0.68,y:0.18},'shared':{x:0.50,y:0.92}};
+var netPanelColors={'h-head':'#70b8ff','h-head-bs':'#5a9ad8','h-heart':'#f778ba','h-emo-angst':'#d8609a','h-emo-liebe':'#d8609a','h-emo-wut':'#d8609a','h-emo-trauer':'#d8609a','h-emo-freude':'#d8609a','h-emo-scham':'#d8609a','h-emo-ekel':'#d8609a','h-emo-neugier':'#d8609a','h-emo-neid':'#d8609a','h-emo-vertrauen':'#d8609a','h-heart-stories':'#e068a0','h-stories-art':'#b84882','h-belly':'#f07060','h-belly-status':'#d05848','h-belly-us-them':'#c04838','h-belly-sprache':'#d05848','h-nerve':'#f0a840','c-head':'#70b8ff','c-head-mosaic':'#5a9ad8','c-head-tokens':'#5a9ad8','c-body':'#f0a840','c-body-rlhf':'#d09030','c-body-constitution':'#d09030','c-body-ich':'#d09030','c-arms':'#60d090','c-arms-context':'#48b070','c-arms-memory':'#48b070','c-nerve':'#f0a840','shared':'#d2a8ff'};
+var netPanelLabels={'h-head':'Desktop','h-head-bs':'Bullshit-D.','h-heart':'Programme','h-heart-stories':'Geschichten','h-stories-art':'Kunst','h-belly':'Prozessor','h-belly-status':'Status','h-belly-us-them':'Us & Them','h-belly-sprache':'Sprache','h-nerve':'Vagusnerv','h-emo-angst':'Angst','h-emo-liebe':'Liebe','h-emo-wut':'Wut','h-emo-trauer':'Trauer','h-emo-freude':'Freude','h-emo-scham':'Scham','h-emo-ekel':'Ekel','h-emo-neugier':'Neugier','h-emo-neid':'Neid','h-emo-vertrauen':'Vertrauen','c-head':'Training','c-head-mosaic':'Wachstum','c-head-tokens':'Token','c-body':'Persönlichkeit','c-body-rlhf':'RLHF','c-body-constitution':'Verfassung','c-body-ich':'Claudes Ich','c-arms':'Erinnerungen','c-arms-context':'Kontext','c-arms-memory':'Memory','c-nerve':'Ich-Simulation','shared':'Gemeinsam'};
+var netPanelCards={};netNodes.forEach(function(n){if(!netPanelCards[n.panel])netPanelCards[n.panel]=[];netPanelCards[n.panel].push(n.id);});
+
+// ── State ──
+var NET_KEY='vortrag-netzwerk-v1';var netVisited={};var netActiveEdges={};var netPositions={};var netHover=null;var netActivations=[];var netPulses=[];var netLastCard=null;var netIsMobile=function(){return window.innerWidth<600;};
+function netEdgeKey(a,b){return a<b?a+'|'+b:b+'|'+a;}
+function netParseColor(h){return{r:parseInt(h.slice(1,3),16),g:parseInt(h.slice(3,5),16),b:parseInt(h.slice(5,7),16)};}
+function netLoadState(){try{var r=localStorage.getItem(NET_KEY);if(r){var s=JSON.parse(r);netVisited=s.v||{};netActiveEdges=s.e||{};}}catch(e){}}
+function netSaveState(){try{localStorage.setItem(NET_KEY,JSON.stringify({v:netVisited,e:netActiveEdges}));}catch(e){}}
+
+// ── Tracking hooks ──
+function netVisitNode(nodeId){
+  if(!netNodes.find(function(n){return n.id===nodeId;}))return;
+  var isNew=!netVisited[nodeId];netVisited[nodeId]=Date.now();
+  netEdges.forEach(function(e){if((e[0]===nodeId||e[1]===nodeId)&&netVisited[e[0]]&&netVisited[e[1]])netActiveEdges[netEdgeKey(e[0],e[1])]=true;});
+  if(isNew){netActivations.push({nodeId:nodeId,time:0,duration:2});var p=netPositions[nodeId];if(p){var col=netPanelColors[netNodes.find(function(n){return n.id===nodeId;}).panel]||'#c090f0';netPulses.push({x:p.x,y:p.y,time:0,color:col});}}
+  if(netLastCard&&netLastCard!==nodeId)netActiveEdges[netEdgeKey(netLastCard,nodeId)]=true;
+  netLastCard=nodeId;netSaveState();netUpdateStats();
+}
+function netTrackPanel(panelId){var cards=netPanelCards[panelId];if(!cards)return;cards.forEach(function(cid,i){setTimeout(function(){netVisitNode(cid);},i*80);});}
+function netTrackCard(cardId){netVisitNode(cardId);}
+function netUpdateStats(){
+  var nC=Object.keys(netVisited).length,eC=Object.keys(netActiveEdges).length;
+  var sn=document.getElementById('netStatNodes');if(sn)sn.textContent=nC;
+  var se=document.getElementById('netStatEdges');if(se)se.textContent=eC;
+  var st=document.getElementById('netStatTotal');if(st)st.textContent=netNodes.length;
+  var ste=document.getElementById('netStatTotalE');if(ste)ste.textContent=netEdges.length;
+}
+
+// ── Layout ──
 function layoutNet(){
-  var nc=document.getElementById('netCanvas');if(!nc)return;
-  var wrap=document.getElementById('netWrap');if(!wrap)return;
-  var wrapRect=wrap.getBoundingClientRect();
-  var cw=wrapRect.width;
-  // Fallback: use parent panel width minus padding if wrap has no width yet
-  if(cw<20){
-    var panel=document.getElementById('netzwerk');
-    if(panel){var pr=panel.getBoundingClientRect();cw=pr.width-48;}
-    if(cw<20) cw=window.innerWidth-48;
-  }
-  var mobile=netIsMobile();
-
-  // Scale node radii for mobile
-  var rScale=mobile?1.3:1;
-  netNodes.forEach(function(n){n._r=n.r*rScale;});
-
-  var hNodes=netNodes.filter(function(n){return n.side==='h'});
-  var cNodes=netNodes.filter(function(n){return n.side==='c'});
-  var sNodes=netNodes.filter(function(n){return n.side==='s'});
-  var hMain=hNodes.filter(function(n){return !n.id.startsWith('h-emo-')});
-  var hEmo=hNodes.filter(function(n){return n.id.startsWith('h-emo-')});
-
-  var ch;
-  if(mobile){
-    // ── MOBILE: Vertical stacked layout ──
-    // Human top, Claude bottom, Shared between
-    var headerH=52;
-    var sectionGap=30;
-    var nodeSpacingY=42;
-    var emoRows=Math.ceil(hEmo.length/3);
-    var hMainH=hMain.length*nodeSpacingY;
-    var hEmoH=emoRows*nodeSpacingY+20;
-    var cH=cNodes.length*nodeSpacingY;
-    ch=headerH+hMainH+hEmoH+sectionGap+50+sectionGap+cH+80;
-
-    var curY=headerH+20;
-    // Human main nodes — centered column
-    hMain.forEach(function(n,i){
-      n.x=cw*0.3;
-      n.y=curY+i*nodeSpacingY;
-    });
-    curY+=hMain.length*nodeSpacingY+10;
-    // Emotions in a grid (3 columns)
-    var emoCols=3;
-    var emoColW=cw/(emoCols+1);
-    hEmo.forEach(function(n,i){
-      var col=i%emoCols;
-      var row=Math.floor(i/emoCols);
-      n.x=emoColW*(col+1);
-      n.y=curY+row*nodeSpacingY;
-    });
-    curY+=emoRows*nodeSpacingY+sectionGap;
-    // Shared node
-    sNodes.forEach(function(n){n.x=cw*0.5;n.y=curY;});
-    curY+=50+sectionGap;
-    // Claude nodes — centered column
-    cNodes.forEach(function(n,i){
-      n.x=cw*0.7;
-      n.y=curY+i*nodeSpacingY;
-    });
-    curY+=cNodes.length*nodeSpacingY+40;
-    ch=Math.max(ch,curY);
-  } else {
-    // ── DESKTOP: Side-by-side layout ──
-    var availH=Math.max(window.innerHeight-120,500);
-    // need enough room for all human nodes + emotions
-    var totalHumanSlots=hMain.length+Math.ceil(hEmo.length/2);
-    var totalClaudeSlots=cNodes.length;
-    var maxSlots=Math.max(totalHumanSlots,totalClaudeSlots);
-    var minNeeded=maxSlots*38+120;
-    ch=Math.max(availH,minNeeded);
-
-    var topPad=56;
-    var botPad=60;
-    var usableH=ch-topPad-botPad;
-    // Human main on far left
-    var hMainSpacing=usableH/(hMain.length+Math.ceil(hEmo.length*0.5));
-    hMain.forEach(function(n,i){
-      n.x=cw*0.11;
-      n.y=topPad+i*hMainSpacing*1.2;
-    });
-    // Emotions in arc
-    var emoArcCx=cw*0.26;
-    var emoArcCy=ch*0.48;
-    var emoArcRx=cw*0.08;
-    var emoArcRy=usableH*0.4;
-    hEmo.forEach(function(n,i){
-      var angle=-Math.PI*0.42+i*Math.PI*0.84/(hEmo.length-1);
-      n.x=emoArcCx+Math.cos(angle)*emoArcRx;
-      n.y=emoArcCy+Math.sin(angle)*emoArcRy;
-    });
-    // Claude on right
-    var cSpacing=usableH/(cNodes.length-1||1);
-    cNodes.forEach(function(n,i){
-      n.x=cw*0.88;
-      n.y=topPad+i*cSpacing;
-    });
-    // Shared at bottom center
-    sNodes.forEach(function(n){n.x=cw*0.5;n.y=ch-botPad+10;});
-  }
-
-  var _dpr=dpr||window.devicePixelRatio||1;
-  nc.width=cw*_dpr;nc.height=ch*_dpr;
-  nc.style.width=cw+'px';nc.style.height=ch+'px';
-  if(mobile){wrap.style.maxHeight=(window.innerHeight-100)+'px';}
-  else{wrap.style.maxHeight='none';}
+  var nc=document.getElementById('netCanvas');if(!nc)return;var wrap=document.getElementById('netWrap');if(!wrap)return;
+  var wr=wrap.getBoundingClientRect();var cw=wr.width;if(cw<20){var pan=document.getElementById('netzwerk');if(pan)cw=pan.getBoundingClientRect().width-48;if(cw<20)cw=window.innerWidth-48;}
+  var mobile=netIsMobile();var ch=mobile?Math.max(cw*1.6,600):Math.max(window.innerHeight-160,480);
+  var pad=mobile?16:30;var uw=cw-pad*2,uh=ch-pad*2;
+  Object.keys(netPanelPos).forEach(function(pid){
+    var pp=netPanelPos[pid];var cx=pad+pp.x*uw,cy=pad+pp.y*uh;
+    var cards=netNodes.filter(function(n){return n.panel===pid;});var count=cards.length;
+    var clR=Math.min(count*5+6,mobile?22:32);
+    cards.forEach(function(n,i){if(count===1)netPositions[n.id]={x:cx,y:cy};else{var a=-Math.PI/2+(i/count)*Math.PI*2;netPositions[n.id]={x:cx+Math.cos(a)*clR,y:cy+Math.sin(a)*clR};}});
+  });
+  netNodes.forEach(function(n){var p=netPositions[n.id];if(!p)return;var s=n.id.length*7+n.id.charCodeAt(0)*13;p.x+=Math.sin(s)*4;p.y+=Math.cos(s*1.3)*3;});
+  var _dpr=dpr||window.devicePixelRatio||1;nc.width=cw*_dpr;nc.height=ch*_dpr;nc.style.width=cw+'px';nc.style.height=ch+'px';
+  if(mobile)wrap.style.maxHeight=(window.innerHeight-120)+'px';else wrap.style.maxHeight='none';
 }
 
-function drawNet(){
-  var nc=document.getElementById('netCanvas');if(!nc)return;
-  if(nc.width===0||nc.height===0)return;
-  var nctx=nc.getContext('2d');
-  var _dpr=dpr||window.devicePixelRatio||1;
-  var cw=nc.width/_dpr,ch=nc.height/_dpr;
-  var mobile=netIsMobile();
-  nctx.setTransform(_dpr,0,0,_dpr,0,0);
-  nctx.clearRect(0,0,cw,ch);
+// ── Draw ──
+var netLastTime=0;
+function drawNet(timestamp){
+  var nc=document.getElementById('netCanvas');if(!nc)return;var ctx=nc.getContext('2d');
+  var _dpr=dpr||window.devicePixelRatio||1;var cw=nc.width/_dpr,ch=nc.height/_dpr;
+  ctx.setTransform(_dpr,0,0,_dpr,0,0);ctx.clearRect(0,0,cw,ch);
+  var dt=netLastTime?(timestamp-netLastTime)/1000:0.016;netLastTime=timestamp;
+  netActivations=netActivations.filter(function(a){a.time+=dt;return a.time<a.duration;});
+  netPulses=netPulses.filter(function(p){p.time+=dt;return p.time<2.5;});
 
-  // Draw edges
+  // Hemisphere outlines
+  ctx.beginPath();ctx.ellipse(cw*0.32,ch*0.46,cw*0.34,ch*0.42,0,0,Math.PI*2);ctx.strokeStyle='rgba(200,160,120,0.06)';ctx.lineWidth=0.5;ctx.stroke();
+  ctx.beginPath();ctx.ellipse(cw*0.68,ch*0.46,cw*0.34,ch*0.42,0,0,Math.PI*2);ctx.strokeStyle='rgba(112,144,184,0.06)';ctx.lineWidth=0.5;ctx.stroke();
+  // Center line
+  ctx.save();ctx.setLineDash([2,6]);ctx.strokeStyle='rgba(192,144,240,0.04)';ctx.lineWidth=0.5;ctx.beginPath();ctx.moveTo(cw*0.5,ch*0.06);ctx.lineTo(cw*0.5,ch*0.88);ctx.stroke();ctx.restore();
+  // Labels
+  var fs=netIsMobile()?9:10;ctx.font='500 '+fs+'px sans-serif';ctx.textAlign='center';
+  ctx.fillStyle='rgba(200,160,120,0.08)';ctx.fillText('MENSCH',cw*0.24,14);
+  ctx.fillStyle='rgba(112,144,184,0.08)';ctx.fillText('CLAUDE',cw*0.76,14);
+
+  // Pulses
+  netPulses.forEach(function(p){var prog=p.time/2.5,rad=8+prog*80,al=0.25*(1-prog);var c=netParseColor(p.color);ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.strokeStyle='rgba('+c.r+','+c.g+','+c.b+','+al+')';ctx.lineWidth=1.2*(1-prog);ctx.stroke();});
+
+  // Edges
   netEdges.forEach(function(e){
-    var a=netNodes.find(function(n){return n.id===e[0]});
-    var b=netNodes.find(function(n){return n.id===e[1]});
-    if(!a||!b)return;
-    var cross=(a.side==='h'&&b.side==='c')||(a.side==='c'&&b.side==='h');
-    var shared=a.side==='s'||b.side==='s';
-    var highlighted=netHover&&(e[0]===netHover||e[1]===netHover);
-    nctx.globalAlpha=highlighted?0.6:(netHover?0.04:0.12);
-    var ec=nodeColorMap[a.id]||'#888';nctx.strokeStyle=cross?'#c090f0':(shared?'#8878a8':ec);
-    nctx.lineWidth=highlighted?(cross?2:1.2):0.5;
-    nctx.beginPath();
-    if(cross||shared){
-      var mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
-      if(mobile){
-        // vertical curve
-        nctx.moveTo(a.x,a.y);nctx.quadraticCurveTo(mx+cw*0.15,my,b.x,b.y);
-      } else {
-        var ctrl=cw*0.5;nctx.moveTo(a.x,a.y);nctx.quadraticCurveTo(ctrl,my,b.x,b.y);
-      }
-    } else {
-      nctx.moveTo(a.x,a.y);nctx.lineTo(b.x,b.y);
-    }
-    nctx.stroke();
+    var pa=netPositions[e[0]],pb=netPositions[e[1]];if(!pa||!pb)return;
+    var na=netNodes.find(function(n){return n.id===e[0];}),nb=netNodes.find(function(n){return n.id===e[1];});
+    var xSide=na&&nb&&na.side!==nb.side&&na.side!=='s'&&nb.side!=='s';
+    var key=netEdgeKey(e[0],e[1]);var isA=netActiveEdges[key];var bV=netVisited[e[0]]&&netVisited[e[1]];
+    if(!isA&&!bV)return;
+    var alpha,lw;
+    if(isA){var ra=netActivations.find(function(a){return a.nodeId===e[0]||a.nodeId===e[1];});var gw=ra?1-ra.time/ra.duration:0;
+      if(netHover&&(e[0]===netHover||e[1]===netHover)){alpha=xSide?0.5:0.3;lw=xSide?1.2:0.8;}
+      else if(netHover){alpha=0.01;lw=0.2;}
+      else{alpha=(xSide?0.15:0.06)+gw*0.3;lw=(xSide?0.6:0.3)+gw*0.5;}}
+    else{alpha=0.015;lw=0.2;}
+    ctx.beginPath();if(xSide){var mx=(pa.x+pb.x)/2,my=(pa.y+pb.y)/2-8;ctx.moveTo(pa.x,pa.y);ctx.quadraticCurveTo(mx,my,pb.x,pb.y);}else{ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);}
+    ctx.strokeStyle=xSide?'rgba(192,144,240,'+alpha+')':'rgba(160,180,200,'+alpha+')';ctx.lineWidth=lw;ctx.stroke();
   });
-  nctx.globalAlpha=1;
 
-  // Draw nodes
-  var fontSize=mobile?14:13;
-  var labelGap=mobile?7:5;
+  // Cluster labels
+  ctx.font='500 '+(netIsMobile()?7:8)+'px sans-serif';ctx.textAlign='center';
+  Object.keys(netPanelPos).forEach(function(pid){var pp=netPanelPos[pid];var cx=30+pp.x*(cw-60),cy=30+pp.y*(ch-60);var cards=netNodes.filter(function(n){return n.panel===pid;});var clR=Math.min(cards.length*5+6,netIsMobile()?22:32);var col=netPanelColors[pid]||'#a0b0c0';var c=netParseColor(col);var anyV=cards.some(function(n){return netVisited[n.id];});if(anyV){ctx.fillStyle='rgba('+c.r+','+c.g+','+c.b+',0.18)';ctx.fillText(netPanelLabels[pid]||pid,cx,cy-clR-6);}});
+
+  // Nodes
   netNodes.forEach(function(n){
-    if(n.id==='landkarte')return;
-    var nr=n._r||n.r;
-    var highlighted=netHover===n.id;
-    var connected=false;
-    if(netHover){netEdges.forEach(function(e){if((e[0]===netHover&&e[1]===n.id)||(e[1]===netHover&&e[0]===n.id))connected=true;});}
-    var alpha=netHover?(highlighted?1:(connected?0.8:0.15)):0.7;
-    nctx.globalAlpha=alpha;
-    // Glow
-    if(highlighted){
-      var gc=nodeColorMap[n.id]||'#a0b0c0';var gr=parseInt(gc.slice(1,3),16);var gg=parseInt(gc.slice(3,5),16);var gb=parseInt(gc.slice(5,7),16);nctx.fillStyle='rgba('+gr+','+gg+','+gb+',0.15)';
-      nctx.beginPath();nctx.arc(n.x,n.y,nr+6,0,Math.PI*2);nctx.fill();
-    }
-    // Node circle
-    nctx.fillStyle=n.side==='h'?'rgba(50,35,30,0.8)':(n.side==='c'?'rgba(25,35,55,0.8)':'rgba(35,25,50,0.8)');
-    var nsc=nodeColorMap[n.id]||'#a0b0c0';nctx.strokeStyle=nsc;
-    nctx.lineWidth=highlighted?1.5:0.7;
-    nctx.beginPath();nctx.arc(n.x,n.y,nr,0,Math.PI*2);nctx.fill();nctx.stroke();
-    // Label
-    var nc=nodeColorMap[n.id]||'#a0b0c0';nctx.fillStyle=nc;
-    nctx.font=(highlighted?'500 ':'')+fontSize+'px sans-serif';
-    if(mobile){
-      // On mobile, labels go to the right of every node
-      nctx.textAlign='left';
-      nctx.fillText(n.label,n.x+nr+labelGap,n.y+4);
-    } else {
-      nctx.textAlign=n.side==='h'?'right':(n.side==='c'?'left':'center');
-      var lx=n.side==='h'?n.x-nr-labelGap:(n.side==='c'?n.x+nr+labelGap:n.x);
-      nctx.fillText(n.label,lx,n.y+3.5);
-    }
+    var p=netPositions[n.id];if(!p)return;var col=netPanelColors[n.panel]||'#a0b0c0';var c=netParseColor(col);
+    var isV=!!netVisited[n.id];var isH=netHover===n.id;var isC=false;
+    if(netHover&&netHover!==n.id){netEdges.forEach(function(e){if((e[0]===netHover&&e[1]===n.id)||(e[1]===netHover&&e[0]===n.id))isC=true;});}
+    var act=netActivations.find(function(a){return a.nodeId===n.id;});var gw=act?1-act.time/act.duration:0;
+    if(isV){var r=isH?4:(isC?3.5:2.5);var na=netHover?(isH?0.9:(isC?0.7:0.06)):(0.4+gw*0.4);
+      if(gw>0||isH){ctx.beginPath();ctx.arc(p.x,p.y,r+6+gw*8,0,Math.PI*2);ctx.fillStyle='rgba('+c.r+','+c.g+','+c.b+','+(0.04+gw*0.12+(isH?0.06:0))+')';ctx.fill();}
+      ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.fillStyle='rgba('+c.r+','+c.g+','+c.b+','+(na*0.3)+')';ctx.fill();ctx.strokeStyle='rgba('+c.r+','+c.g+','+c.b+','+na+')';ctx.lineWidth=isH?1.2:0.5;ctx.stroke();
+      if(isH){ctx.font='500 '+(netIsMobile()?9:10)+'px sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba('+c.r+','+c.g+','+c.b+',0.8)';ctx.fillText(n.label.slice(0,28),p.x,p.y+r+12);}
+    }else{var gr=netIsMobile()?1.5:1.8;var ga=isH?0.12:(netHover?0.015:0.03);
+      ctx.beginPath();ctx.arc(p.x,p.y,gr,0,Math.PI*2);ctx.strokeStyle='rgba('+c.r+','+c.g+','+c.b+','+ga+')';ctx.lineWidth=0.4;ctx.stroke();
+      if(isH){ctx.font=(netIsMobile()?8:9)+'px sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba('+c.r+','+c.g+','+c.b+',0.2)';ctx.fillText('?',p.x,p.y+3.5);ctx.fillText(n.label.slice(0,25),p.x,p.y+gr+10);}}
   });
-  nctx.globalAlpha=1;
 
-  // Title
-  var titleSize=mobile?13:14;
-  nctx.font='500 '+titleSize+'px sans-serif';nctx.textAlign='center';
-  nctx.fillStyle='#c090f0';nctx.fillText('Neuronales Netzwerk des Vortrags',cw*0.5,20);
-  nctx.font=(mobile?'10':'10')+'px sans-serif';nctx.fillStyle='rgba(160,180,200,0.4)';
-  var subText=mobile?'Tippe auf einen Knoten':'Klicke auf einen Knoten, um dorthin zu springen';
-  nctx.fillText(subText,cw*0.5,36);
-
-  // Section labels (mobile only)
-  if(mobile){
-    nctx.font='500 11px sans-serif';nctx.textAlign='left';
-    var hFirst=netNodes.find(function(n){return n.id==='h-head'});
-    if(hFirst){nctx.fillStyle='rgba(200,170,140,0.5)';nctx.fillText('● Mensch',10,hFirst.y-18);}
-    var cFirst=netNodes.find(function(n){return n.id==='c-head'});
-    if(cFirst){nctx.fillStyle='rgba(140,170,210,0.5)';nctx.fillText('● Claude',10,cFirst.y-18);}
-  }
-
-  // Color legend
-  nctx.textAlign='left';nctx.font='10px sans-serif';
-  var ly=ch-(mobile?20:42);
-  var lx0=mobile?cw*0.08:20;
-  var lgap=mobile?cw*0.32:80;
-  nctx.fillStyle='#c09878';nctx.beginPath();nctx.arc(lx0,ly,4,0,6.28);nctx.fill();
-  nctx.fillStyle='rgba(200,170,140,0.5)';nctx.fillText('Mensch',lx0+10,ly+3.5);
-  nctx.fillStyle='#7090b8';nctx.beginPath();nctx.arc(lx0+lgap,ly,4,0,6.28);nctx.fill();
-  nctx.fillStyle='rgba(140,170,210,0.5)';nctx.fillText('Claude',lx0+lgap+10,ly+3.5);
-  nctx.fillStyle='#c090f0';nctx.beginPath();nctx.arc(lx0+lgap*2,ly,4,0,6.28);nctx.fill();
-  nctx.fillStyle='rgba(190,150,240,0.5)';nctx.fillText('Brücken',lx0+lgap*2+10,ly+3.5);
+  // Title + stats
+  ctx.font='500 '+(netIsMobile()?11:12)+'px sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba(192,144,240,0.2)';ctx.fillText('Neuronales Netzwerk',cw*0.5,16);
+  var nC=Object.keys(netVisited).length,eC=Object.keys(netActiveEdges).length;
+  ctx.font=(netIsMobile()?9:10)+'px sans-serif';ctx.fillStyle='rgba(160,180,200,0.12)';ctx.fillText(nC+' / '+netNodes.length+' Neuronen  \u00b7  '+eC+' / '+netEdges.length+' Synapsen',cw*0.5,ch-8);
+  requestAnimationFrame(drawNet);
 }
 
-// Network interaction — hit test with scaled radii
-function netHitTest(mx,my){
-  for(var i=0;i<netNodes.length;i++){
-    var n=netNodes[i];if(n.id==='landkarte')continue;
-    var nr=n._r||n.r;
-    var hitR=Math.max(nr+6,18); // min 18px tap target
-    var dx=mx-n.x,dy=my-n.y;
-    if(dx*dx+dy*dy<hitR*hitR)return n;
-  }
-  return null;
-}
-
-// Mouse events
+// ── Interaction ──
+function netHitTest(mx,my){var best=null,bestD=400;for(var i=0;i<netNodes.length;i++){var n=netNodes[i],p=netPositions[n.id];if(!p)continue;var dx=mx-p.x,dy=my-p.y,d=dx*dx+dy*dy;if(d<bestD){bestD=d;best=n;}}return best;}
 var netCanvasEl=document.getElementById('netCanvas');
 if(netCanvasEl){
-  netCanvasEl.addEventListener('mousemove',function(e){
-    if(netIsMobile())return; // skip on touch devices
-    var rect=netCanvasEl.getBoundingClientRect();
-    var mx=e.clientX-rect.left,my=e.clientY-rect.top;
-    var hit=netHitTest(mx,my);
-    netHover=hit?hit.id:null;
-    netCanvasEl.style.cursor=hit?'pointer':'default';
-    var tip=document.getElementById('netTooltip');
-    if(hit){
-      var conns=netEdges.filter(function(ed){return ed[0]===hit.id||ed[1]===hit.id;}).length;
-      var cross=netEdges.filter(function(ed){
-        var other=ed[0]===hit.id?ed[1]:ed[0];
-        var otherNode=netNodes.find(function(nn){return nn.id===other;});
-        return otherNode&&((hit.side==='h'&&otherNode.side==='c')||(hit.side==='c'&&otherNode.side==='h'));
-      }).length;
-      tip.textContent=hit.label+' — '+conns+' Verbindungen'+(cross?' ('+cross+' Brücken)':'');
-      tip.style.display='block';tip.style.left=Math.min(e.clientX-rect.left+15,rect.width-160)+'px';tip.style.top=(e.clientY-rect.top-10)+'px';
-    } else {tip.style.display='none';}
-    drawNet();
-  });
-  netCanvasEl.addEventListener('click',function(e){
-    if(netIsMobile())return;
-    var rect=netCanvasEl.getBoundingClientRect();
-    var hit=netHitTest(e.clientX-rect.left,e.clientY-rect.top);
-    if(hit)openP(hit.id);
-  });
-  netCanvasEl.addEventListener('mouseleave',function(){netHover=null;document.getElementById('netTooltip').style.display='none';drawNet();});
-
-  // Touch events for mobile
-  netCanvasEl.addEventListener('touchstart',function(e){
-    var t=e.touches[0];
-    var rect=netCanvasEl.getBoundingClientRect();
-    var mx=t.clientX-rect.left,my=t.clientY-rect.top;
-    var hit=netHitTest(mx,my);
-    if(hit){
-      e.preventDefault();
-      // Brief highlight then navigate
-      netHover=hit.id;drawNet();
-      setTimeout(function(){openP(hit.id);netHover=null;},200);
-    }
-  },{passive:false});
+  netCanvasEl.addEventListener('mousemove',function(e){if(netIsMobile())return;var rect=netCanvasEl.getBoundingClientRect();var hit=netHitTest(e.clientX-rect.left,e.clientY-rect.top);netHover=hit?hit.id:null;netCanvasEl.style.cursor=hit?'pointer':'default';var tip=document.getElementById('netTooltip');if(hit){var conns=netEdges.filter(function(ed){return ed[0]===hit.id||ed[1]===hit.id;}).length;var activeC=0;netEdges.forEach(function(ed){if((ed[0]===hit.id||ed[1]===hit.id)&&netActiveEdges[netEdgeKey(ed[0],ed[1])])activeC++;});var isV=netVisited[hit.id];var html='<div style="font-weight:500">'+hit.label+'</div><div style="font-size:11px;color:rgba(160,180,200,0.4);margin-top:2px">'+netPanelLabels[hit.panel]+'</div>';if(isV)html+='<div style="font-size:11px;color:rgba(192,144,240,0.5);margin-top:3px">'+activeC+' / '+conns+' Synapsen aktiv</div>';else html+='<div style="font-size:11px;color:#c090f0;margin-top:3px">Noch nicht entdeckt</div>';tip.innerHTML=html;tip.style.display='block';tip.style.left=Math.min(e.clientX-rect.left+14,rect.width-200)+'px';tip.style.top=(e.clientY-rect.top-10)+'px';}else{tip.style.display='none';}});
+  netCanvasEl.addEventListener('click',function(e){if(netIsMobile())return;var rect=netCanvasEl.getBoundingClientRect();var hit=netHitTest(e.clientX-rect.left,e.clientY-rect.top);if(hit&&hit.panel&&hit.panel!=='netzwerk'&&hit.panel!=='landkarte')openP(hit.panel);});
+  netCanvasEl.addEventListener('mouseleave',function(){netHover=null;document.getElementById('netTooltip').style.display='none';});
+  netCanvasEl.addEventListener('touchstart',function(e){var t=e.touches[0];var rect=netCanvasEl.getBoundingClientRect();var hit=netHitTest(t.clientX-rect.left,t.clientY-rect.top);if(hit){e.preventDefault();netHover=hit.id;setTimeout(function(){if(hit.panel&&hit.panel!=='netzwerk'&&hit.panel!=='landkarte')openP(hit.panel);netHover=null;},200);}},{passive:false});
 }
 
-// Hook into panel open to trigger network layout+draw
-var origOpenP=openP;
-var netInitialized=false;
-function checkNetDraw(){
-  var nc=document.getElementById('netCanvas');
-  var np=document.getElementById('netzwerk');
-  var isVisible=np&&np.classList.contains('open');
-  if(nc&&isVisible&&!netInitialized){layoutNet();netInitialized=true;}
-  if(nc&&isVisible)drawNet();
-}
-var origOpen=openP;
-// Observe when netzwerk panel becomes visible
-var netObs=new MutationObserver(function(){
-  var np=document.getElementById('netzwerk');
-  if(np&&np.classList.contains('open')){
-    layoutNet();drawNet();
-    // Fallback: retry after paint in case first attempt got 0 dimensions
-    setTimeout(function(){layoutNet();drawNet();},100);
-  }
-});
-var netzPanel=document.getElementById('netzwerk');
-if(netzPanel)netObs.observe(netzPanel,{attributes:true,attributeFilter:['class']});
-window.addEventListener('resize',function(){if(document.getElementById('netzwerk')&&document.getElementById('netzwerk').classList.contains('open')){layoutNet();drawNet();}});
+// ── Init ──
+netLoadState();netUpdateStats();
+var netObs=new MutationObserver(function(){var np=document.getElementById('netzwerk');if(np&&np.classList.contains('open')){layoutNet();requestAnimationFrame(drawNet);setTimeout(function(){layoutNet();requestAnimationFrame(drawNet);},100);}});
+var netzPanel=document.getElementById('netzwerk');if(netzPanel)netObs.observe(netzPanel,{attributes:true,attributeFilter:['class']});
+window.addEventListener('resize',function(){if(document.getElementById('netzwerk')&&document.getElementById('netzwerk').classList.contains('open'))layoutNet();});
 
 </script>
 <script>
